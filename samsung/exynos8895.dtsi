@@ -72,6 +72,8 @@
 			clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CPUCL1>;
 			operating-points-v2 = <&cpucl1_opp_table>;
 			#cooling-cells = <2>;
+			/* No vendor value: the Cortex-A53 coefficient of QCM2290 */
+			dynamic-power-coefficient = <100>;
 		};
 
 		cpu1: cpu@101 {
@@ -83,6 +85,7 @@
 			clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CPUCL1>;
 			operating-points-v2 = <&cpucl1_opp_table>;
 			#cooling-cells = <2>;
+			dynamic-power-coefficient = <100>;
 		};
 
 		cpu2: cpu@102 {
@@ -94,6 +97,7 @@
 			clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CPUCL1>;
 			operating-points-v2 = <&cpucl1_opp_table>;
 			#cooling-cells = <2>;
+			dynamic-power-coefficient = <100>;
 		};
 
 		cpu3: cpu@103 {
@@ -105,6 +109,7 @@
 			clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CPUCL1>;
 			operating-points-v2 = <&cpucl1_opp_table>;
 			#cooling-cells = <2>;
+			dynamic-power-coefficient = <100>;
 		};
 
 		cpu4: cpu@0 {
@@ -116,6 +121,7 @@
 			clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CPUCL0>;
 			operating-points-v2 = <&cpucl0_opp_table>;
 			#cooling-cells = <2>;
+			dynamic-power-coefficient = <465>;
 		};
 
 		cpu5: cpu@1 {
@@ -127,6 +133,7 @@
 			clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CPUCL0>;
 			operating-points-v2 = <&cpucl0_opp_table>;
 			#cooling-cells = <2>;
+			dynamic-power-coefficient = <465>;
 		};
 
 		cpu6: cpu@2 {
@@ -138,6 +145,7 @@
 			clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CPUCL0>;
 			operating-points-v2 = <&cpucl0_opp_table>;
 			#cooling-cells = <2>;
+			dynamic-power-coefficient = <465>;
 		};
 
 		cpu7: cpu@3 {
@@ -149,6 +157,7 @@
 			clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CPUCL0>;
 			operating-points-v2 = <&cpucl0_opp_table>;
 			#cooling-cells = <2>;
+			dynamic-power-coefficient = <465>;
 		};
 	};
 
