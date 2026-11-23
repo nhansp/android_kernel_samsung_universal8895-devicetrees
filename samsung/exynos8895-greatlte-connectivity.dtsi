@@ -1,0 +1,86 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) Wi-Fi and Bluetooth
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	wlan {
+		compatible = "samsung,brcm-wlan";
+		wlan-reg-on-gpios = <&gpj1 3 GPIO_ACTIVE_HIGH>;
+		interrupts-extended = <&gpa0 7 IRQ_TYPE_EDGE_RISING>;
+		samsung,pcie = <&pcie0>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cfg_wlanen &wlan_host_wake>;
+		status = "okay";
+	};
+
+	bluetooth {
+		compatible = "samsung,bcm43xx";
+		bt-en-gpios = <&gpj1 7 GPIO_ACTIVE_HIGH>;
+		bt-wake-gpios = <&gpj1 4 GPIO_ACTIVE_HIGH>;
+		bt-host-wake-gpios = <&gpa2 3 GPIO_ACTIVE_HIGH>;
+		interrupts-extended = <&gpa2 3 IRQ_TYPE_EDGE_BOTH>;
+		samsung,uart = <&serial_1>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&bt_hostwake &bt_btwake &bt_en>;
+		status = "okay";
+	};
+};
+
+&pcie0 {
+	pinctrl-names = "default", "clkreq_output";
+	pinctrl-0 = <&pcie0_clkreq &pcie0_perst &pcie_wake>;
+	pinctrl-1 = <&pcie0_perst &pcie_wake>;
+	reset-gpios = <&gpj1 2 GPIO_ACTIVE_LOW>;
+	status = "okay";
+};
+
+&pinctrl_alive {
+	uart1_bus_rts: uart1-bus-rts-pins {
+		samsung,pins = "gpa4-4";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-val = <1>;
+	};
+
+	uart1_bus_tx_dat: uart1-bus-tx-dat-pins {
+		samsung,pins = "gpa4-3";
+		samsung,pin-val = <1>;
+	};
+
+	uart1_bus_tx_con: uart1-bus-tx-con-pins {
+		samsung,pins = "gpa4-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+	};
+};
+
+&pinctrl_fsys1 {
+	pcie0_clkreq: pcie0-clkreq-pins {
+		samsung,pins = "gpj1-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_UP>;
+	};
+
+	pcie0_perst: pcie0-perst-pins {
+		samsung,pins = "gpj1-2";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+	};
+};
+
+&serial_1 {
+	samsung,rts-gpio-control;
+	samsung,rts-trig-level = <1>;
+	pinctrl-names = "default", "rts", "tx_dat";
+	pinctrl-0 = <&uart1_bus>;
+	pinctrl-1 = <&uart1_bus_rts &uart1_bus_tx_con>;
+	pinctrl-2 = <&uart1_bus_tx_dat>;
+	status = "okay";
+};
