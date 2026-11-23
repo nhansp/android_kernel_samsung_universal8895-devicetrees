@@ -6,6 +6,7 @@
  */
 
 #include <dt-bindings/clock/samsung,exynos8895.h>
+#include <dt-bindings/clock/samsung,exynos8895-acpm.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 
 / {
@@ -124,6 +125,16 @@
 			reg = <0x3>;
 			enable-method = "psci";
 			capacity-dmips-mhz = <5035>;
+		};
+	};
+
+	firmware {
+		acpm_ipc: power-management {
+			compatible = "samsung,exynos8895-acpm-ipc";
+			#clock-cells = <1>;
+			mboxes = <&ap2apm_mailbox>;
+			shmem = <&apm_sram>;
+			status = "disabled";
 		};
 	};
 
@@ -1518,6 +1529,16 @@
 			clock-names = "oscclk", "bus";
 		};
 
+		ap2apm_mailbox: mailbox@16440000 {
+			compatible = "samsung,exynos8895-mbox";
+			reg = <0x16440000 0x1000>;
+			clocks = <&cmu_apm CLK_GOUT_APM_MAILBOX_APM2AP_PCLK>;
+			clock-names = "pclk";
+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+			#mbox-cells = <0>;
+			status = "disabled";
+		};
+
 		pmu_system_controller: system-controller@16480000 {
 			compatible = "samsung,exynos8895-pmu",
 				     "samsung,exynos7-pmu", "syscon";
@@ -1674,6 +1695,16 @@
 				interrupt-parent = <&gic>;
 				interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
 			};
+		};
+
+		apm_sram: sram@16500000 {
+			compatible = "mmio-sram";
+			reg = <0x16500000 0xb400>;
+			#address-cells = <1>;
+			#size-cells = <1>;
+			ranges = <0x0 0x16500000 0xb400>;
+			no-memory-wc;
+			status = "disabled";
 		};
 
 		cmu_cpucl0: clock-controller@16800000 {
