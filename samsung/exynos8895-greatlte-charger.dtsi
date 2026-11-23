@@ -1,0 +1,207 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) charger and fuel gauge
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	battery: battery {
+		compatible = "simple-battery";
+		constant-charge-voltage-max-microvolt = <4350000>;
+		constant-charge-current-max-microamp = <2100000>;
+		charge-full-design-microamp-hours = <3300000>;
+	};
+};
+
+&hsi2c_29 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	clock-frequency = <100000>;
+	status = "okay";
+
+	wpc: wireless-charger@3b {
+		compatible = "idt,mfc-charger";
+		reg = <0x3b>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&wpc_int &wpc_det &wpc_en>;
+		interrupts-extended = <&gpa2 0 IRQ_TYPE_EDGE_BOTH>,
+				      <&gpa3 2 IRQ_TYPE_EDGE_FALLING>;
+		interrupt-names = "wpc-det", "wpc-int";
+		det-gpios = <&gpa2 0 GPIO_ACTIVE_HIGH>;
+		int-gpios = <&gpa3 2 GPIO_ACTIVE_HIGH>;
+		disable-gpios = <&gpe6 2 GPIO_ACTIVE_HIGH>;
+		samsung,fod-wpc = /bits/ 8 <0x96 0x34 0x8e 0x2c 0x96 0x1e 0x96 0x16 0xa5 0xeb 0x9c 0x0d>;
+		samsung,fod-pma = /bits/ 8 <0x96 0x34 0x8e 0x2c 0x96 0x1e 0x96 0x16 0xa5 0xeb 0x9c 0x0d>;
+		samsung,fod-wpc-cv = /bits/ 8 <0x96 0x52 0x8e 0x4a 0x96 0x3c 0x96 0x34 0xa5 0x09 0x9c 0x2b>;
+		samsung,fod-pma-cv = /bits/ 8 <0x96 0x52 0x8e 0x4a 0x96 0x3c 0x96 0x34 0xa5 0x09 0x9c 0x2b>;
+		samsung,fod-hero-5v = /bits/ 8 <0x96 0x0c 0x8e 0x04 0x96 0xf6 0x96 0xee 0xa5 0xc3 0x9c 0xe5>;
+		samsung,rpp-cover = /bits/ 8 <0x44>;
+		samsung,rpp-hv = /bits/ 8 <0x40>;
+		status = "okay";
+	};
+};
+
+&hsi2c_32 {
+	clock-frequency = <400000>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	pmic_max77865: pmic@66 {
+		compatible = "maxim,max77865";
+		reg = <0x66>;
+		interrupt-parent = <&gpa1>;
+		interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
+		interrupt-controller;
+		#interrupt-cells = <1>;
+		wakeup-source;
+		pinctrl-names = "default";
+		pinctrl-0 = <&max77865_irq &muic_irq>;
+
+		haptic {
+			compatible = "maxim,max77865-haptic";
+			pwms = <&pwm 1 48828 0>;
+			maxim,max-duty-ns = <41503>;
+			maxim,max-timeout-ms = <10000>;
+			maxim,multi-freq-duty-ns = <41503 48828 39063 29296 32551 37108 37108>;
+			maxim,multi-freq-period-ns = <48828 65104 52083 39062 43402 39062 39062>;
+		};
+
+		leds {
+			compatible = "maxim,max77865-rgb";
+			maxim,normal-current = <0x0a>;
+			maxim,lowpower-current = <0x0a>;
+			maxim,brightness-ratio = <0x2d0 0x46 0x96>;
+			maxim,brightness-ratio-low = <0x5a 0x0a 0x14>;
+		};
+	};
+
+	max77865_charger: charger@69 {
+		compatible = "maxim,max77865-charger";
+		reg = <0x69>;
+		interrupt-parent = <&pmic_max77865>;
+		interrupts = <0>;
+		samsung,battery-ntc = "battery-ntc";
+		samsung,pmu = <&pmu_system_controller>;
+		maxim,pmic = <&pmic_max77865>;
+		jig-gpios = <&gpi1 4 GPIO_ACTIVE_LOW>;
+		samsung,charge-control;
+
+		otg_vbus: usb-otg-vbus {
+			regulator-name = "usb_otg_vbus";
+			regulator-min-microvolt = <5020000>;
+			regulator-max-microvolt = <5020000>;
+		};
+	};
+
+	fuel-gauge@36 {
+		compatible = "maxim,max77865-battery";
+		reg = <0x36>;
+		maxim,rsns-microohm = <10000>;
+		maxim,over-heat-temp = <499>;
+		maxim,cold-temp = <1>;
+		power-supplies = <&max77865_charger>;
+		monitored-battery = <&battery>;
+		samsung,battery-ntc = "battery-ntc";
+		samsung,capacity-max = <1000>;
+		samsung,capacity-max-margin = <300>;
+		samsung,capacity-min = <0>;
+		samsung,full-condition-microvolt = <4250000>;
+		samsung,full-condition-percent = <93>;
+		samsung,recharge-condition-microvolt = <4280000>;
+		maxim,ttf-cv-data = <0x9b8 0x33d 0x711 0x969 0x340 0x704 0x917 0x345 0x6e9
+				     0x8e0 0x348 0x6cf 0x886 0x34e 0x6b9 0x838 0x352 0x69a
+				     0x7f6 0x356 0x686 0x79e 0x35b 0x668 0x770 0x35d 0x656
+				     0x72e 0x361 0x63a 0x705 0x363 0x628 0x6d5 0x366 0x618
+				     0x6a7 0x369 0x5fb 0x693 0x369 0x5f5 0x683 0x36b 0x5eb
+				     0x67c 0x36b 0x5e8 0x675 0x36c 0x5e5 0x64f 0x36e 0x5de
+				     0x62c 0x370 0x5cb 0x611 0x371 0x5b7 0x608 0x372 0x5b2
+				     0x5f0 0x373 0x5ab 0x5c5 0x376 0x590 0x597 0x378 0x581
+				     0x574 0x37b 0x567 0x543 0x37e 0x551 0x513 0x380 0x534
+				     0x4f3 0x382 0x523 0x4cf 0x386 0x508 0x4b2 0x388 0x4ef
+				     0x47c 0x38a 0x4db 0x455 0x38d 0x4bd 0x42b 0x38f 0x4a1
+				     0x407 0x392 0x484 0x3f5 0x393 0x474 0x3cf 0x395 0x457
+				     0x3c1 0x397 0x43c 0x399 0x399 0x428 0x37c 0x39b 0x40e
+				     0x377 0x39b 0x3fb 0x35f 0x39d 0x3ec 0x341 0x39f 0x3d0
+				     0x328 0x3a1 0x3b2 0x313 0x3a2 0x396 0x30c 0x3a3 0x388
+				     0x2fc 0x3a4 0x37f 0x2e8 0x3a6 0x360 0x2da 0x3a7 0x34e
+				     0x2cb 0x3a8 0x33c 0x2b5 0x3a9 0x320 0x2a9 0x3aa 0x30f
+				     0x29a 0x3ac 0x2f0 0x28b 0x3ad 0x2df 0x280 0x3ae 0x2c8
+				     0x274 0x3b1 0x2b9 0x26e 0x3b2 0x2a7 0x26a 0x3b3 0x298
+				     0x258 0x3b6 0x286 0x254 0x3b7 0x273 0x24d 0x3b9 0x266
+				     0x248 0x3b9 0x259 0x240 0x3bc 0x23c 0x241 0x3bd 0x229
+				     0x232 0x3be 0x217 0x1ff 0x3c8 0x1fa 0x1f9 0x3c9 0x1e7
+				     0x1ed 0x3cb 0x1d0 0x1ec 0x3cc 0x1b3 0x1e4 0x3cd 0x1a1
+				     0x1e0 0x3cf 0x18e 0x1da 0x3d0 0x17c 0x1d6 0x3d1 0x16c
+				     0x1ce 0x3d1 0x163 0x1c8 0x3d2 0x150 0x1c4 0x3d3 0x149
+				     0x1be 0x3d5 0x12f 0x1b5 0x3d6 0x11a 0x1ad 0x3d8 0xff
+				     0x1a7 0x3d9 0xf2 0x1a6 0x3da 0xe5 0x19e 0x3db 0xd3
+				     0x19b 0x3dc 0xc7 0x195 0x3dd 0xbf 0x18d 0x3de 0xab
+				     0x187 0x3df 0x8c 0x183 0x3e0 0x7e 0x180 0x3e1 0x6b
+				     0x174 0x3e3 0x54 0x16c 0x3e5 0x36 0x164 0x3e6 0x1a
+				     0x164 0x3e6 0x0d 0x00 0x3e8 0x00>;
+	};
+
+	max77865_muic: muic@25 {
+		compatible = "maxim,max77865-muic";
+		reg = <0x25>;
+		interrupts-extended = <&gpa0 0 IRQ_TYPE_LEVEL_LOW>;
+		wakeup-source;
+		maxim,afc-initial-tx = /bits/ 8 <0x08>;
+		maxim,qc-hv = /bits/ 8 <9>;
+	};
+};
+
+&pinctrl_alive {
+	max77865_irq: max77865-irq-pins {
+		samsung,pins = "gpa1-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	muic_irq: muic-irq-pins {
+		samsung,pins = "gpa0-0";
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	wpc_int: wpc-int-pins {
+		samsung,pins = "gpa3-2";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	wpc_det: wpc-det-pins {
+		samsung,pins = "gpa2-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+	};
+};
+
+&pinctrl_peric0 {
+	pwm_tout1: pwm-tout1-pins {
+		samsung,pins = "gpd0-5";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+};
+
+&pinctrl_peric1 {
+	wpc_en: wpc-en-pins {
+		samsung,pins = "gpe6-2";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+};
+
+&pwm {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pwm_tout1>;
+	status = "okay";
+};
