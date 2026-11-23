@@ -1,0 +1,49 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) multimedia
+ */
+
+&cmu_g2d {
+	status = "okay";
+};
+
+&cmu_mfc {
+	status = "okay";
+};
+
+&g2d {
+	status = "okay";
+};
+
+&mfc {
+	memory-region = <&mfc_iova>;
+	status = "okay";
+};
+
+&scaler {
+	status = "okay";
+};
+
+&smfc {
+	status = "okay";
+};
+
+&sysmmu_g2dd0 {
+	status = "okay";
+};
+
+&sysmmu_g2dd1 {
+	status = "okay";
+};
+
+&sysmmu_g2dd2 {
+	status = "okay";
+};
+
+&sysmmu_mfc0 {
+	status = "okay";
+};
+
+&sysmmu_mfc1 {
+	status = "okay";
+};
