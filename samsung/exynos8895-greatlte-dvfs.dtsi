@@ -1,0 +1,61 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) CPU and bus DVFS
+ */
+
+&bus_cam {
+	memory-region = <&ect_mem>;
+	status = "okay";
+};
+
+&bus_disp {
+	memory-region = <&ect_mem>;
+	status = "okay";
+};
+
+&bus_int {
+	memory-region = <&ect_mem>;
+	status = "okay";
+};
+
+&bus_intcam {
+	memory-region = <&ect_mem>;
+	status = "okay";
+};
+
+&bus_mif {
+	memory-region = <&ect_mem>;
+	status = "okay";
+};
+
+&cpu0 {
+	samsung,transition-delay-us = <20000>;
+};
+
+&cpu1 {
+	samsung,transition-delay-us = <20000>;
+};
+
+&cpu2 {
+	samsung,transition-delay-us = <20000>;
+};
+
+&cpu3 {
+	samsung,transition-delay-us = <20000>;
+};
+
+&cpu4 {
+	samsung,transition-delay-us = <20000>;
+};
+
+&cpu5 {
+	samsung,transition-delay-us = <20000>;
+};
+
+&cpu6 {
+	samsung,transition-delay-us = <20000>;
+};
+
+&cpu7 {
+	samsung,transition-delay-us = <20000>;
+};
