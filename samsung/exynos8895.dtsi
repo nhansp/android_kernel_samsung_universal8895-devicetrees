@@ -295,6 +295,96 @@
 		};
 	};
 
+	bus_mif: bus-mif {
+		compatible = "samsung,exynos8895-bus-mif";
+		clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_MIF>;
+		operating-points-v2 = <&bus_mif_opp_table>;
+		status = "disabled";
+	};
+
+	bus_mif_opp_table: opp-table-bus-mif {
+		compatible = "operating-points-v2";
+
+		opp-286000000 { opp-hz = /bits/ 64 <286000000>; };
+		opp-421000000 { opp-hz = /bits/ 64 <421000000>; };
+		opp-546000000 { opp-hz = /bits/ 64 <546000000>; };
+		opp-676000000 { opp-hz = /bits/ 64 <676000000>; };
+		opp-845000000 { opp-hz = /bits/ 64 <845000000>; };
+		opp-1014000000 { opp-hz = /bits/ 64 <1014000000>; };
+		opp-1352000000 { opp-hz = /bits/ 64 <1352000000>; };
+		opp-1540000000 { opp-hz = /bits/ 64 <1540000000>; };
+		opp-1794000000 { opp-hz = /bits/ 64 <1794000000>; };
+	};
+
+	bus_int: bus-int {
+		compatible = "samsung,exynos8895-bus-int";
+		clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_INT>;
+		operating-points-v2 = <&bus_int_opp_table>;
+		status = "disabled";
+	};
+
+	bus_int_opp_table: opp-table-bus-int {
+		compatible = "operating-points-v2";
+
+		opp-107000000 { opp-hz = /bits/ 64 <107000000>; };
+		opp-178000000 { opp-hz = /bits/ 64 <178000000>; };
+		opp-267000000 { opp-hz = /bits/ 64 <267000000>; };
+		opp-333000000 { opp-hz = /bits/ 64 <333000000>; };
+		opp-400000000 { opp-hz = /bits/ 64 <400000000>; };
+		opp-533000000 { opp-hz = /bits/ 64 <533000000>; };
+		opp-667000000 { opp-hz = /bits/ 64 <667000000>; };
+	};
+
+	bus_intcam: bus-intcam {
+		compatible = "samsung,exynos8895-bus-intcam";
+		clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_INTCAM>;
+		operating-points-v2 = <&bus_intcam_opp_table>;
+		status = "disabled";
+	};
+
+	bus_intcam_opp_table: opp-table-bus-intcam {
+		compatible = "operating-points-v2";
+
+		opp-640000000 { opp-hz = /bits/ 64 <640000000>; };
+		opp-670000000 { opp-hz = /bits/ 64 <670000000>; };
+		opp-680000000 { opp-hz = /bits/ 64 <680000000>; };
+		opp-690000000 { opp-hz = /bits/ 64 <690000000>; };
+	};
+
+	bus_cam: bus-cam {
+		compatible = "samsung,exynos8895-bus-cam";
+		clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_CAM>;
+		operating-points-v2 = <&bus_cam_opp_table>;
+		status = "disabled";
+	};
+
+	bus_cam_opp_table: opp-table-bus-cam {
+		compatible = "operating-points-v2";
+
+		opp-630000000 { opp-hz = /bits/ 64 <630000000>; };
+		opp-640000000 { opp-hz = /bits/ 64 <640000000>; };
+		opp-650000000 { opp-hz = /bits/ 64 <650000000>; };
+		opp-660000000 { opp-hz = /bits/ 64 <660000000>; };
+		opp-670000000 { opp-hz = /bits/ 64 <670000000>; };
+		opp-680000000 { opp-hz = /bits/ 64 <680000000>; };
+		opp-690000000 { opp-hz = /bits/ 64 <690000000>; };
+	};
+
+	bus_disp: bus-disp {
+		compatible = "samsung,exynos8895-bus-disp";
+		clocks = <&acpm_ipc EXYNOS8895_CLK_ACPM_DVFS_DISP>;
+		operating-points-v2 = <&bus_disp_opp_table>;
+		status = "disabled";
+	};
+
+	bus_disp_opp_table: opp-table-bus-disp {
+		compatible = "operating-points-v2";
+
+		opp-214000000 { opp-hz = /bits/ 64 <214000000>; };
+		opp-356000000 { opp-hz = /bits/ 64 <356000000>; };
+		opp-533000000 { opp-hz = /bits/ 64 <533000000>; };
+	};
+
 	oscclk: osc-clock {
 		compatible = "fixed-clock";
 		#clock-cells = <0>;
