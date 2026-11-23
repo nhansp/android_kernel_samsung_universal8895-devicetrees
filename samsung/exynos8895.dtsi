@@ -1743,6 +1743,44 @@
 			status = "disabled";
 		};
 
+		pcie0: pcie@11700000 {
+			compatible = "samsung,exynos8895-pcie";
+			reg = <0x11700000 0x1000>,
+			      <0x116a0000 0x1000>,
+			      <0x116d0000 0x1000>,
+			      <0x116c0000 0x1fc>,
+			      <0x11bff000 0x1000>;
+			reg-names = "dbi", "elbi", "phy", "pcs", "config";
+			interrupts = <GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_DBI_ACLK_0>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_MSTR_ACLK_0>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_SLV_ACLK_0>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_PCIE_SUB_CTRL_INST_0_I_DRIVER_APB_CLK>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_PIPE2_DIGITAL_X2_WRAP_INST_0_I_APB_PCLK_SCL>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_IEEE1500_WRAPPER_FOR_PCIE_PHY_LC_X2_INST_0_I_SCL_APB_PCLK>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_PHY_REF_CLK_IN>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_DBI_ACLK_1>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_MSTR_ACLK_1>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_SLV_ACLK_1>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_PCIE_PCIE_SUB_CTRL_INST_1_I_DRIVER_APB_CLK>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_TOE_WIFI0_I_CLK>,
+				 <&cmu_fsys1 CLK_GOUT_FSYS1_TOE_WIFI1_I_CLK>;
+			clock-names = "dbi", "mstr", "slv", "apb", "pipe_apb", "phy_apb", "ref",
+				      "dbi1", "mstr1", "slv1", "apb1", "toe0", "toe1";
+			samsung,pmu-syscon = <&pmu_system_controller>;
+			samsung,fsys-sysreg = <&syscon_fsys1 0x1044>;
+			#address-cells = <3>;
+			#size-cells = <2>;
+			device_type = "pci";
+			ranges = <0x82000000 0x0 0x11800000 0x11800000 0x0 0x400000>;
+			bus-range = <0x00 0xff>;
+			#interrupt-cells = <1>;
+			interrupt-map-mask = <0 0 0 0>;
+			interrupt-map = <0 0 0 0 &gic GIC_SPI 345 IRQ_TYPE_LEVEL_HIGH>;
+			num-lanes = <1>;
+			status = "disabled";
+		};
+
 		cmu_dpu0: clock-controller@12800000 {
 			compatible = "samsung,exynos8895-cmu-dpu0";
 			reg = <0x12800000 0x8000>;
