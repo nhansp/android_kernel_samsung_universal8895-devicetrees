@@ -1,0 +1,310 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) device tree source
+ */
+
+/dts-v1/;
+
+/memreserve/ 0xe0000000 0x1900000;
+
+#include "exynos8895.dtsi"
+#include <dt-bindings/soc/samsung,exynos-usi.h>
+
+/ {
+	model = "Samsung Galaxy Note 8 (SM-N950N)";
+	compatible = "samsung,greatlte", "samsung,exynos8895";
+	chassis-type = "handset";
+
+	aliases {
+		i2c10 = &hsi2c_10;
+		i2c11 = &hsi2c_11;
+		i2c23 = &hsi2c_23;
+		i2c25 = &hsi2c_25;
+		i2c26 = &hsi2c_26;
+		i2c29 = &hsi2c_29;
+		i2c30 = &hsi2c_30;
+		i2c32 = &hsi2c_32;
+		mfc0 = &mfc;
+		mmc0 = &mmc;
+		serial0 = &serial_0;
+		serial1 = &serial_1;
+		spi3 = &spi_3;
+		spi10 = &spi_10;
+	};
+
+	chosen {
+	};
+
+	memory@80000000 {
+		device_type = "memory";
+		reg = <0x0 0x80000000 0x3c800000>;
+	};
+
+	memory@c0000000 {
+		device_type = "memory";
+		reg = <0x0 0xc0000000 0x40000000>;
+	};
+
+	memory@880000000 {
+		device_type = "memory";
+		reg = <0x8 0x80000000 0x80000000>;
+	};
+
+	memory@900000000 {
+		device_type = "memory";
+		reg = <0x9 0x0 0x0>;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <1>;
+		ranges;
+
+		kaslr_mem: kaslr@80001000 {
+			reg = <0x0 0x80001000 0x1000>;
+		};
+
+		dram_test_mem: dram-test@80002000 {
+			reg = <0x0 0x80002000 0x2000>;
+		};
+
+		ramoops@92000000 {
+			compatible = "ramoops";
+			reg = <0x0 0x92000000 0x8000>;
+			record-size = <0x4000>;
+			console-size = <0x4000>;
+		};
+
+		el3-debug@91808000 {
+			compatible = "samsung,exynos8895-el3-debug";
+			reg = <0x0 0x91808000 0x2000>;
+		};
+
+		ect_mem: ect@a0000000 {
+			reg = <0x0 0xa0000000 0x19000>;
+		};
+
+		tima_mem: tima@b1000000 {
+			reg = <0x0 0xb1000000 0x200000>;
+			no-map;
+		};
+
+		seclog_mem: seclog@c0000000 {
+			reg = <0x0 0xc0000000 0x10000>;
+			no-map;
+		};
+
+		secure_camera_mem: secure-camera@d0000000 {
+			reg = <0x0 0xd0000000 0x1400000>;
+			ion,secure;
+		};
+
+		abox_rmem: abox@ea800000 {
+			reg = <0x0 0xea800000 0x400000>;
+		};
+
+		modem_mem: modem@f4c00000 {
+			reg = <0x0 0xf4c00000 0x9000000>;
+		};
+
+		cp_ram_logging_mem: cp-ram-logging@fdc00000 {
+			reg = <0x0 0xfdc00000 0x2000000>;
+		};
+
+		gnss_mem: gnss@ffc00000 {
+			reg = <0x0 0xffc00000 0x400000>;
+			no-map;
+		};
+
+		camera_mem: camera@880000000 {
+			reg = <0x8 0x80000000 0x15e00000>;
+			compatible = "shared-dma-pool";
+			reusable;
+		};
+
+		splash_mem: framebuffer@cc000000 {
+			reg = <0x0 0xcc000000 (1440 * 2960 * 4)>;
+			no-map;
+			iommu-addresses = <&decon 0xcc000000 (1440 * 2960 * 4)>;
+		};
+
+		vstream_rmem: video-stream@e6c00000 {
+			compatible = "shared-dma-pool";
+			reg = <0x0 0xe6c00000 0x3c00000>;
+			reusable;
+		};
+
+		crypto_rmem: crypto@f3400000 {
+			compatible = "shared-dma-pool";
+			reg = <0x0 0xf3400000 0x1800000>;
+			reusable;
+		};
+
+		mfc_iova: mfc-iova-reserved {
+			iommu-addresses = <&mfc 0x0 0x10108000>,
+					  <&mfc 0xd0000000 0x30000000>;
+		};
+	};
+};
+
+&cmu_fsys0 {
+	status = "okay";
+};
+
+&cmu_fsys1 {
+	status = "okay";
+};
+
+&cmu_peric0 {
+	status = "okay";
+};
+
+&cmu_peric1 {
+	status = "okay";
+};
+
+&cmu_peris {
+	status = "okay";
+};
+
+&cmu_top {
+	status = "okay";
+};
+
+&oscclk {
+	clock-frequency = <26000000>;
+};
+
+&pd_cam {
+	status = "okay";
+};
+
+&pd_dcam {
+	status = "okay";
+};
+
+&pd_dsp {
+	status = "okay";
+};
+
+&pd_g2d {
+	status = "okay";
+};
+
+&pd_isphq {
+	status = "okay";
+};
+
+&pd_isplp {
+	status = "okay";
+};
+
+&pd_iva {
+	status = "okay";
+};
+
+&pd_mfc {
+	status = "okay";
+};
+
+&pd_srdz {
+	status = "okay";
+};
+
+&pd_vpu {
+	status = "okay";
+};
+
+&pinctrl_abox {
+	status = "okay";
+};
+
+&pinctrl_alive {
+	status = "okay";
+};
+
+&pinctrl_busc {
+	status = "okay";
+};
+
+&pinctrl_fsys0 {
+	status = "okay";
+};
+
+&pinctrl_fsys1 {
+	status = "okay";
+};
+
+&pinctrl_peric0 {
+	status = "okay";
+};
+
+&pinctrl_peric1 {
+	status = "okay";
+};
+
+&pinctrl_vts {
+	status = "okay";
+};
+
+&pmu_system_controller {
+	status = "okay";
+};
+
+&serial_0 {
+	status = "okay";
+};
+
+&usi1 {
+	samsung,mode = <USI_MODE_SPI>;
+	status = "okay";
+};
+
+&usi2 {
+	samsung,mode = <USI_MODE_I2C0_1>;
+	status = "okay";
+};
+
+&usi3 {
+	samsung,mode = <USI_MODE_I2C0_1>;
+	status = "okay";
+};
+
+&usi5 {
+	samsung,mode = <USI_MODE_I2C0_1>;
+	status = "okay";
+};
+
+&usi8 {
+	samsung,mode = <USI_MODE_SPI>;
+	status = "okay";
+};
+
+&usi9 {
+	samsung,mode = <USI_MODE_I2C0_1>;
+	status = "okay";
+};
+
+&usi10 {
+	samsung,mode = <USI_MODE_I2C0_1>;
+	status = "okay";
+};
+
+&usi11 {
+	samsung,mode = <USI_MODE_I2C0_1>;
+	status = "okay";
+};
+
+&usi12 {
+	samsung,mode = <USI_MODE_I2C0_1>;
+	status = "okay";
+};
+
+&usi13 {
+	samsung,mode = <USI_MODE_UART_I2C1>;
+	status = "okay";
+};
+
+&watchdog {
+	status = "okay";
+};
