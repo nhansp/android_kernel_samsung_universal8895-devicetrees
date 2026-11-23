@@ -1,0 +1,190 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) input devices
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	gpio-keys {
+		compatible = "gpio-keys";
+		label = "gpio_keys";
+		pinctrl-names = "default";
+		pinctrl-0 = <&key_wink &key_voldown &key_volup &key_power>;
+
+		key-wink {
+			label = "gpio-keys: KEY_WINK";
+			gpios = <&gpa0 6 GPIO_ACTIVE_LOW>;
+			linux,code = <0x2bf>;
+			wakeup-source;
+		};
+
+		key-volume-down {
+			label = "gpio-keys: KEY_VOLUMEDOWN";
+			gpios = <&gpa0 4 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_VOLUMEDOWN>;
+		};
+
+		key-volume-up {
+			label = "gpio-keys: KEY_VOLUMEUP";
+			gpios = <&gpa0 3 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_VOLUMEUP>;
+		};
+
+		key-power {
+			label = "gpio-keys: KEY_POWER";
+			gpios = <&gpa2 4 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_POWER>;
+			wakeup-source;
+		};
+	};
+
+	hall-keys {
+		compatible = "gpio-keys";
+		label = "hall";
+		pinctrl-names = "default";
+		pinctrl-0 = <&hall_irq>;
+
+		flip-cover {
+			label = "flip_cover";
+			gpios = <&gpa0 1 GPIO_ACTIVE_LOW>;
+			linux,input-type = <EV_SW>;
+			linux,code = <SW_LID>;
+			wakeup-source;
+			debounce-interval = <10>;
+		};
+	};
+
+	wacom_3v3: regulator-wacom {
+		compatible = "regulator-fixed";
+		regulator-name = "wacom_3.3v";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&gpe7 2 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-boot-on;
+	};
+
+	certify-hall-keys {
+		compatible = "gpio-keys";
+		label = "certify_hall";
+		pinctrl-names = "default";
+		pinctrl-0 = <&certify_hall_irq>;
+
+		certify-cover {
+			label = "certify_cover";
+			gpios = <&gpa0 2 GPIO_ACTIVE_LOW>;
+			linux,input-type = <EV_SW>;
+			linux,code = <SW_MACHINE_COVER>;
+			wakeup-source;
+			debounce-interval = <10>;
+		};
+	};
+};
+
+&hsi2c_10 {
+	clock-frequency = <400000>;
+	status = "okay";
+
+	digitizer@56 {
+		compatible = "wacom,w9018";
+		reg = <0x56>;
+		interrupts-extended = <&gpa2 2 IRQ_TYPE_LEVEL_LOW>,
+				      <&gpa2 1 IRQ_TYPE_EDGE_BOTH>;
+		interrupt-names = "data", "pdct";
+		pdct-gpios = <&gpa2 1 GPIO_ACTIVE_HIGH>;
+		fwe-gpios = <&gpe7 4 GPIO_ACTIVE_HIGH>;
+		vddo-supply = <&wacom_3v3>;
+		wacom,xy-switch;
+		wacom,x-invert;
+		pinctrl-names = "default";
+		pinctrl-0 = <&epen_int_active>;
+	};
+};
+
+&hsi2c_23 {
+	clock-frequency = <400000>;
+	status = "okay";
+
+	touchscreen@48 {
+		compatible = "samsung,s6sy661";
+		reg = <0x48>;
+		interrupt-parent = <&gpa1>;
+		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+		vdd-supply = <&ldo34_reg>;
+		avdd-supply = <&ldo35_reg>;
+		touchscreen-size-x = <4096>;
+		touchscreen-size-y = <4096>;
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&attn_irq>;
+		pinctrl-1 = <&attn_input>;
+		samsung,sponge-model = "N950";
+		panel = <&panel>;
+	};
+};
+
+&pinctrl_alive {
+	attn_irq: attn-irq-pins {
+		samsung,pins = "gpa1-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	attn_input: attn-input-pins {
+		samsung,pins = "gpa1-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+	};
+
+	epen_int_active: epen-int-active-pins {
+		samsung,pins = "gpa2-1", "gpa2-2";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	key_wink: key-wink-pins {
+		samsung,pins = "gpa0-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	key_voldown: key-voldown-pins {
+		samsung,pins = "gpa0-4";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	key_volup: key-volup-pins {
+		samsung,pins = "gpa0-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	key_power: key-power-pins {
+		samsung,pins = "gpa2-4";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	hall_irq: hall-irq-pins {
+		samsung,pins = "gpa0-1";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+
+	certify_hall_irq: certify-hall-irq-pins {
+		samsung,pins = "gpa0-2";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+};
