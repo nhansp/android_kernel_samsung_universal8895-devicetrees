@@ -1792,6 +1792,128 @@
 			status = "disabled";
 		};
 
+		syscon_dpu0: syscon@12820000 {
+			compatible = "samsung,exynos8895-dpu0-sysreg", "syscon";
+			reg = <0x12820000 0x2000>;
+		};
+
+		decon: display-controller@12860000 {
+			compatible = "samsung,exynos8895-decon";
+			reg = <0x12860000 0x10000>,
+			      <0x12851000 0x6000>,
+			      <0x128b0000 0x7000>;
+			reg-names = "decon", "dpp", "dma";
+			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 179 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>,
+				     <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "frame_start", "frame_done", "extra",
+					  "g0_dma", "g0_dpp", "g1_dma", "g1_dpp",
+					  "vg0_dma", "vg0_dpp", "vg1_dma", "vg1_dpp",
+					  "vgf0_dma", "vgf0_dpp", "vgf1_dma", "vgf1_dpp";
+			clocks = <&cmu_dpu0 CLK_GOUT_DPU0_DECON0_ACLK>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_DPP_DPP_G0_ACLK>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_DPU_DMA_ACLK_SFR>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_DPU_DMA_ACLK_CH1>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_SYSREG_DPU0_PCLK>;
+			clock-names = "aclk", "dpp_g0", "dma_sfr", "dma_ch1", "sysreg";
+			power-domains = <&pd_dpu0>;
+			iommus = <&sysmmu_dpu0>, <&sysmmu_dpu1>, <&sysmmu_dpu2>;
+			samsung,disp-sysreg = <&syscon_dpu0>;
+			status = "disabled";
+
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port@0 {
+					reg = <0>;
+
+					decon_to_dsi: endpoint {
+						remote-endpoint = <&dsi_from_decon>;
+					};
+				};
+			};
+		};
+
+		dsi: dsi@12870000 {
+			compatible = "samsung,exynos8895-mipi-dsi";
+			reg = <0x12870000 0x100>;
+			interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_dpu0 CLK_GOUT_DPU0_AD_APB_MIPI_DSIM0_PCLKS>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_SYSREG_DPU0_PCLK>;
+			clock-names = "bus", "sysreg";
+			phys = <&mipi_phy 1>;
+			phy-names = "dsim";
+			power-domains = <&pd_dpu1>;
+			samsung,pll-clock-frequency = <26000000>;
+			samsung,disp-sysreg = <&syscon_dpu0>;
+			samsung,dpu1-sysreg = <&syscon_dpu1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port@0 {
+					reg = <0>;
+
+					dsi_from_decon: endpoint {
+						remote-endpoint = <&decon_to_dsi>;
+					};
+				};
+			};
+		};
+
+		sysmmu_dpu0: iommu@12900000 {
+			compatible = "samsung,exynos-sysmmu";
+			reg = <0x12900000 0x3000>;
+			interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_dpu0 CLK_GOUT_DPU0_SYSMMU_DPUD0_ACLK>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_SYSMMU_DPUD0_PCLK_NONSECURE>;
+			clock-names = "aclk", "pclk";
+			power-domains = <&pd_dpu0>;
+			#iommu-cells = <0>;
+			status = "disabled";
+		};
+
+		sysmmu_dpu1: iommu@12910000 {
+			compatible = "samsung,exynos-sysmmu";
+			reg = <0x12910000 0x3000>;
+			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_dpu0 CLK_GOUT_DPU0_SYSMMU_DPUD1_ACLK>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_SYSMMU_DPUD1_PCLK_NONSECURE>;
+			clock-names = "aclk", "pclk";
+			power-domains = <&pd_dpu0>;
+			#iommu-cells = <0>;
+			status = "disabled";
+		};
+
+		sysmmu_dpu2: iommu@12920000 {
+			compatible = "samsung,exynos-sysmmu";
+			reg = <0x12920000 0x3000>;
+			interrupts = <GIC_SPI 158 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_dpu0 CLK_GOUT_DPU0_SYSMMU_DPUD2_ACLK>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_SYSMMU_DPUD2_PCLK_NONSECURE>;
+			clock-names = "aclk", "pclk";
+			power-domains = <&pd_dpu0>;
+			#iommu-cells = <0>;
+			status = "disabled";
+		};
+
 		cmu_dpu1: clock-controller@12a00000 {
 			compatible = "samsung,exynos8895-cmu-dpu1";
 			reg = <0x12a00000 0x8000>;
@@ -1802,6 +1924,11 @@
 			clock-names = "oscclk", "busd", "busp";
 			power-domains = <&pd_dpu1>;
 			status = "disabled";
+		};
+
+		syscon_dpu1: syscon@12a20000 {
+			compatible = "samsung,exynos8895-dpu1-sysreg", "syscon";
+			reg = <0x12a20000 0x1000>;
 		};
 
 		cmu_cam: clock-controller@12c00000 {
@@ -2029,6 +2156,12 @@
 				mode-secure = <0x12345677>;
 				mode-fwup = <0x12345679>;
 				mode-bootloader = <0x1234567d>;
+			};
+
+			mipi_phy: mipi-phy {
+				compatible = "samsung,exynos8895-mipi-video-phy";
+				#phy-cells = <1>;
+				status = "disabled";
 			};
 		};
 
