@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) ION heaps
+ */
+
+/ {
+	ion: ion {
+		compatible = "samsung,exynos8895-ion-legacy";
+		memory-region = <&camera_mem>, <&crypto_rmem>, <&vstream_rmem>, <&secure_camera_mem>;
+		memory-region-names = "camera", "crypto", "vstream", "secure_camera";
+		samsung,ion-heap-ids = <10 1 3 11>;
+		samsung,ion-compat-ids = <0 0 0x82000000 0>;
+	};
+};
