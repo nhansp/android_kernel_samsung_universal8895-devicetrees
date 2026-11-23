@@ -1320,14 +1320,179 @@
 			status = "disabled";
 		};
 
+		cmu_dpu0: clock-controller@12800000 {
+			compatible = "samsung,exynos8895-cmu-dpu0";
+			reg = <0x12800000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_DPU_BUS>;
+			clock-names = "oscclk", "bus";
+			power-domains = <&pd_dpu0>;
+			status = "disabled";
+		};
+
+		cmu_dpu1: clock-controller@12a00000 {
+			compatible = "samsung,exynos8895-cmu-dpu1";
+			reg = <0x12a00000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_CLKCMU_DPU1_BUSD>,
+				 <&cmu_dpu0 CLK_GOUT_DPU0_CLKCMU_DPU1_BUSP>;
+			clock-names = "oscclk", "busd", "busp";
+			power-domains = <&pd_dpu1>;
+			status = "disabled";
+		};
+
+		cmu_cam: clock-controller@12c00000 {
+			compatible = "samsung,exynos8895-cmu-cam";
+			reg = <0x12c00000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_CAM_BUS>,
+				 <&cmu_top CLK_DOUT_CMU_CAM_TPU0>,
+				 <&cmu_top CLK_DOUT_CMU_CAM_TPU1>,
+				 <&cmu_top CLK_DOUT_CMU_CAM_VRA>;
+			clock-names = "oscclk", "bus", "tpu0", "tpu1", "vra";
+			assigned-clocks = <&cmu_cam CLK_MOUT_CAM_BUS_USER>, <&cmu_cam CLK_MOUT_CAM_TPU0_USER>,
+					  <&cmu_cam CLK_MOUT_CAM_TPU1_USER>, <&cmu_cam CLK_MOUT_CAM_VRA_USER>;
+			assigned-clock-parents = <&cmu_top CLK_DOUT_CMU_CAM_BUS>, <&cmu_top CLK_DOUT_CMU_CAM_TPU0>,
+						 <&cmu_top CLK_DOUT_CMU_CAM_TPU1>, <&cmu_top CLK_DOUT_CMU_CAM_VRA>;
+			power-domains = <&pd_cam>;
+			status = "disabled";
+		};
+
+		cmu_dcam: clock-controller@12e00000 {
+			compatible = "samsung,exynos8895-cmu-dcam";
+			reg = <0x12e00000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_DCAM_BUS>,
+				 <&cmu_top CLK_DOUT_CMU_DCAM_IMGD>;
+			clock-names = "oscclk", "bus", "imgd";
+			assigned-clocks = <&cmu_dcam CLK_MOUT_DCAM_BUS_USER>, <&cmu_dcam CLK_MOUT_DCAM_IMGD_USER>;
+			assigned-clock-parents = <&cmu_top CLK_DOUT_CMU_DCAM_BUS>, <&cmu_top CLK_DOUT_CMU_DCAM_IMGD>;
+			power-domains = <&pd_dcam>;
+			status = "disabled";
+		};
+
+		cmu_isplp: clock-controller@13000000 {
+			compatible = "samsung,exynos8895-cmu-isplp";
+			reg = <0x13000000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_ISPLP_BUS>;
+			clock-names = "oscclk", "bus";
+			assigned-clocks = <&cmu_isplp CLK_MOUT_ISPLP_BUS_USER>;
+			assigned-clock-parents = <&cmu_top CLK_DOUT_CMU_ISPLP_BUS>;
+			power-domains = <&pd_isplp>;
+			status = "disabled";
+		};
+
+		cmu_isphq: clock-controller@13100000 {
+			compatible = "samsung,exynos8895-cmu-isphq";
+			reg = <0x13100000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_ISPHQ_BUS>;
+			clock-names = "oscclk", "bus";
+			assigned-clocks = <&cmu_isphq CLK_MOUT_ISPHQ_BUS_USER>;
+			assigned-clock-parents = <&cmu_top CLK_DOUT_CMU_ISPHQ_BUS>;
+			power-domains = <&pd_isphq>;
+			status = "disabled";
+		};
+
+		cmu_g3d: clock-controller@13800000 {
+			compatible = "samsung,exynos8895-cmu-g3d";
+			reg = <0x13800000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_G3D_SWITCH>,
+				 <&cmu_top CLK_DOUT_CMU_HPM>;
+			clock-names = "oscclk", "switch", "hpm";
+			status = "disabled";
+		};
+
+		cmu_g2d: clock-controller@13a00000 {
+			compatible = "samsung,exynos8895-cmu-g2d";
+			reg = <0x13a00000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_G2D_G2D>,
+				 <&cmu_top CLK_DOUT_CMU_G2D_JPEG>;
+			clock-names = "oscclk", "g2d", "jpeg";
+			assigned-clocks = <&cmu_g2d CLK_MOUT_G2D_G2D_USER>, <&cmu_g2d CLK_MOUT_G2D_JPEG_USER>;
+			assigned-clock-parents = <&cmu_top CLK_DOUT_CMU_G2D_G2D>, <&cmu_top CLK_DOUT_CMU_G2D_JPEG>;
+			power-domains = <&pd_g2d>;
+			status = "disabled";
+		};
+
+		cmu_mfc: clock-controller@13c00000 {
+			compatible = "samsung,exynos8895-cmu-mfc";
+			reg = <0x13c00000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_MFC_BUS>;
+			clock-names = "oscclk", "bus";
+			assigned-clocks = <&cmu_mfc CLK_MOUT_MFC_BUS_USER>;
+			assigned-clock-parents = <&cmu_top CLK_DOUT_CMU_MFC_BUS>;
+			power-domains = <&pd_mfc>;
+			status = "disabled";
+		};
+
+		cmu_abox: clock-controller@13e00000 {
+			compatible = "samsung,exynos8895-cmu-abox";
+			reg = <0x13e00000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_ABOX_CPUABOX>;
+			clock-names = "oscclk", "cpuabox";
+			power-domains = <&pd_abox>;
+			status = "disabled";
+		};
+
 		pinctrl_abox: pinctrl@13e60000 {
 			compatible = "samsung,exynos8895-pinctrl";
 			reg = <0x13e60000 0x1000>;
 		};
 
+		cmu_vts: clock-controller@14000000 {
+			compatible = "samsung,exynos8895-cmu-vts";
+			reg = <0x14000000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>;
+			clock-names = "oscclk";
+			power-domains = <&pd_vts>;
+			status = "disabled";
+		};
+
 		pinctrl_vts: pinctrl@14080000 {
 			compatible = "samsung,exynos8895-pinctrl";
 			reg = <0x14080000 0x1000>;
+		};
+
+		cmu_srdz: clock-controller@14200000 {
+			compatible = "samsung,exynos8895-cmu-srdz";
+			reg = <0x14200000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_SRDZ_BUS>,
+				 <&cmu_top CLK_DOUT_CMU_SRDZ_IMGD>;
+			clock-names = "oscclk", "bus", "imgd";
+			assigned-clocks = <&cmu_srdz CLK_MOUT_SRDZ_BUS_USER>, <&cmu_srdz CLK_MOUT_SRDZ_IMGD_USER>;
+			assigned-clock-parents = <&cmu_top CLK_DOUT_CMU_SRDZ_BUS>, <&cmu_top CLK_DOUT_CMU_SRDZ_IMGD>;
+			power-domains = <&pd_srdz>;
+			status = "disabled";
+		};
+
+		cmu_busc: clock-controller@15a00000 {
+			compatible = "samsung,exynos8895-cmu-busc";
+			reg = <0x15a00000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_BUSC_BUS>,
+				 <&cmu_top CLK_DOUT_CMU_BUSC_BUSPHSI2C>;
+			clock-names = "oscclk", "bus", "busphsi2c";
+			status = "disabled";
 		};
 
 		pinctrl_busc: pinctrl@15a30000 {
@@ -1344,10 +1509,22 @@
 			clock-names = "oscclk";
 		};
 
+		cmu_apm: clock-controller@16400000 {
+			compatible = "samsung,exynos8895-cmu-apm";
+			reg = <0x16400000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_APM_BUS>;
+			clock-names = "oscclk", "bus";
+		};
+
 		pmu_system_controller: system-controller@16480000 {
 			compatible = "samsung,exynos8895-pmu",
 				     "samsung,exynos7-pmu", "syscon";
 			reg = <0x16480000 0x10000>;
+			clocks = <&oscclk>;
+			clock-names = "clkout1";
+			#clock-cells = <1>;
 		};
 
 		pd_abox: power-domain@16484000 {
@@ -1497,6 +1674,27 @@
 				interrupt-parent = <&gic>;
 				interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
 			};
+		};
+
+		cmu_cpucl0: clock-controller@16800000 {
+			compatible = "samsung,exynos8895-cmu-cpucl0";
+			reg = <0x16800000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_CPUCL0_SWITCH>,
+				 <&cmu_top CLK_DOUT_CMU_HPM>,
+				 <&cmu_top CLK_GOUT_CMU_DROOPDETECTOR>;
+			clock-names = "oscclk", "switch", "hpm", "droop";
+		};
+
+		cmu_cpucl1: clock-controller@16900000 {
+			compatible = "samsung,exynos8895-cmu-cpucl1";
+			reg = <0x16900000 0x8000>;
+			#clock-cells = <1>;
+			clocks = <&oscclk>,
+				 <&cmu_top CLK_DOUT_CMU_CPUCL1_SWITCH>,
+				 <&cmu_top CLK_DOUT_CMU_HPM>;
+			clock-names = "oscclk", "switch", "hpm";
 		};
 	};
 
