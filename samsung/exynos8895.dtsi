@@ -1881,6 +1881,19 @@
 			clocks = <&oscclk>;
 			clock-names = "clkout1";
 			#clock-cells = <1>;
+
+			reboot-mode {
+				compatible = "syscon-reboot-mode";
+				offset = <0x080c>;
+				mode-download = <0x12345671>;
+				mode-upload = <0x12345672>;
+				mode-recovery = <0x12345674>;
+				mode-fota = <0x12345675>;
+				mode-fota_bl = <0x12345676>;
+				mode-secure = <0x12345677>;
+				mode-fwup = <0x12345679>;
+				mode-bootloader = <0x1234567d>;
+			};
 		};
 
 		pd_abox: power-domain@16484000 {
