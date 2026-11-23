@@ -1,0 +1,988 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) power management
+ */
+
+#include <dt-bindings/soc/samsung,exynos8895-pm.h>
+
+/ {
+	cpus {
+		idle-states {
+			entry-method = "psci";
+
+			BOOTCL_CPU_SLEEP: cpu-sleep-bootcl {
+				compatible = "arm,idle-state";
+				idle-state-name = "c2";
+				arm,psci-suspend-param = <0x10000>;
+				local-timer-stop;
+				entry-latency-us = <35>;
+				exit-latency-us = <90>;
+				min-residency-us = <750>;
+			};
+
+			NONBOOTCL_CPU_SLEEP: cpu-sleep-nonbootcl {
+				compatible = "arm,idle-state";
+				idle-state-name = "c2";
+				arm,psci-suspend-param = <0x10000>;
+				local-timer-stop;
+				entry-latency-us = <30>;
+				exit-latency-us = <75>;
+				min-residency-us = <2000>;
+			};
+		};
+	};
+};
+
+&{/timer} {
+	arm,no-tick-in-suspend;
+};
+
+&cpu0 {
+	cpu-idle-states = <&BOOTCL_CPU_SLEEP>;
+};
+
+&cpu1 {
+	cpu-idle-states = <&BOOTCL_CPU_SLEEP>;
+};
+
+&cpu2 {
+	cpu-idle-states = <&BOOTCL_CPU_SLEEP>;
+};
+
+&cpu3 {
+	cpu-idle-states = <&BOOTCL_CPU_SLEEP>;
+};
+
+&cpu4 {
+	cpu-idle-states = <&NONBOOTCL_CPU_SLEEP>;
+};
+
+&cpu5 {
+	cpu-idle-states = <&NONBOOTCL_CPU_SLEEP>;
+};
+
+&cpu6 {
+	cpu-idle-states = <&NONBOOTCL_CPU_SLEEP>;
+};
+
+&cpu7 {
+	cpu-idle-states = <&NONBOOTCL_CPU_SLEEP>;
+};
+
+&pinctrl_busc {
+	pinctrl-names = "default";
+	pinctrl-0 = <&busc_pdn>;
+
+	busc_pdn: sleep-state {
+		gpb2-0-pin {
+			samsung,pins = "gpb2-0";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <3>;
+		};
+
+		gpb2-1-pin {
+			samsung,pins = "gpb2-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+	};
+};
+
+&pinctrl_fsys0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&fsys0_pdn>;
+
+	fsys0_pdn: sleep-state {
+		gpi0-2-pin {
+			samsung,pins = "gpi0-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpi1-0-pin {
+			samsung,pins = "gpi1-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpi1-1-pin {
+			samsung,pins = "gpi1-1";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpi1-2-pin {
+			samsung,pins = "gpi1-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpi1-3-pin {
+			samsung,pins = "gpi1-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpi1-4-pin {
+			samsung,pins = "gpi1-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpi1-5-pin {
+			samsung,pins = "gpi1-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpi1-6-pin {
+			samsung,pins = "gpi1-6";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpi1-7-pin {
+			samsung,pins = "gpi1-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+	};
+};
+
+&pinctrl_fsys1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&fsys1_pdn>;
+
+	fsys1_pdn: sleep-state {
+		gpj0-6-pin {
+			samsung,pins = "gpj0-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpj1-0-pin {
+			samsung,pins = "gpj1-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpj1-1-pin {
+			samsung,pins = "gpj1-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpj1-3-pin {
+			samsung,pins = "gpj1-3";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpj1-4-pin {
+			samsung,pins = "gpj1-4";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpj1-5-pin {
+			samsung,pins = "gpj1-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpj1-6-pin {
+			samsung,pins = "gpj1-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpj1-7-pin {
+			samsung,pins = "gpj1-7";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+	};
+};
+
+&pinctrl_peric0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&peric0_pdn>;
+
+	peric0_pdn: sleep-state {
+		gpb1-2-pin {
+			samsung,pins = "gpb1-2";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpb1-3-pin {
+			samsung,pins = "gpb1-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd0-0-pin {
+			samsung,pins = "gpd0-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd0-1-pin {
+			samsung,pins = "gpd0-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd0-2-pin {
+			samsung,pins = "gpd0-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd0-3-pin {
+			samsung,pins = "gpd0-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd0-6-pin {
+			samsung,pins = "gpd0-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpd0-7-pin {
+			samsung,pins = "gpd0-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpd1-0-pin {
+			samsung,pins = "gpd1-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpd1-1-pin {
+			samsung,pins = "gpd1-1";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd1-2-pin {
+			samsung,pins = "gpd1-2";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd1-3-pin {
+			samsung,pins = "gpd1-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpd1-4-pin {
+			samsung,pins = "gpd1-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpd1-5-pin {
+			samsung,pins = "gpd1-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpd1-6-pin {
+			samsung,pins = "gpd1-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpd1-7-pin {
+			samsung,pins = "gpd1-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpd2-0-pin {
+			samsung,pins = "gpd2-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd2-1-pin {
+			samsung,pins = "gpd2-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd2-2-pin {
+			samsung,pins = "gpd2-2";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd2-3-pin {
+			samsung,pins = "gpd2-3";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd3-0-pin {
+			samsung,pins = "gpd3-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd3-1-pin {
+			samsung,pins = "gpd3-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd3-2-pin {
+			samsung,pins = "gpd3-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd3-3-pin {
+			samsung,pins = "gpd3-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpd3-4-pin {
+			samsung,pins = "gpd3-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe7-0-pin {
+			samsung,pins = "gpe7-0";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe7-1-pin {
+			samsung,pins = "gpe7-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe7-2-pin {
+			samsung,pins = "gpe7-2";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe7-3-pin {
+			samsung,pins = "gpe7-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe7-5-pin {
+			samsung,pins = "gpe7-5";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe7-6-pin {
+			samsung,pins = "gpe7-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe7-7-pin {
+			samsung,pins = "gpe7-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpf1-0-pin {
+			samsung,pins = "gpf1-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpf1-1-pin {
+			samsung,pins = "gpf1-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpf1-2-pin {
+			samsung,pins = "gpf1-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpf1-3-pin {
+			samsung,pins = "gpf1-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpf1-4-pin {
+			samsung,pins = "gpf1-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpf1-5-pin {
+			samsung,pins = "gpf1-5";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpf1-7-pin {
+			samsung,pins = "gpf1-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+	};
+};
+
+&pinctrl_peric1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&peric1_pdn>;
+
+	peric1_pdn: sleep-state {
+		gpb0-0-pin {
+			samsung,pins = "gpb0-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc0-0-pin {
+			samsung,pins = "gpc0-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc0-1-pin {
+			samsung,pins = "gpc0-1";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc0-2-pin {
+			samsung,pins = "gpc0-2";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc0-3-pin {
+			samsung,pins = "gpc0-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc0-4-pin {
+			samsung,pins = "gpc0-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc1-0-pin {
+			samsung,pins = "gpc1-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc1-1-pin {
+			samsung,pins = "gpc1-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc1-2-pin {
+			samsung,pins = "gpc1-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc1-3-pin {
+			samsung,pins = "gpc1-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc1-4-pin {
+			samsung,pins = "gpc1-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc2-0-pin {
+			samsung,pins = "gpc2-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpc2-1-pin {
+			samsung,pins = "gpc2-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpc2-2-pin {
+			samsung,pins = "gpc2-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpc2-3-pin {
+			samsung,pins = "gpc2-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpc2-4-pin {
+			samsung,pins = "gpc2-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc2-5-pin {
+			samsung,pins = "gpc2-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc2-6-pin {
+			samsung,pins = "gpc2-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc2-7-pin {
+			samsung,pins = "gpc2-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc3-0-pin {
+			samsung,pins = "gpc3-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc3-1-pin {
+			samsung,pins = "gpc3-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc3-2-pin {
+			samsung,pins = "gpc3-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc3-3-pin {
+			samsung,pins = "gpc3-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc3-4-pin {
+			samsung,pins = "gpc3-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc3-5-pin {
+			samsung,pins = "gpc3-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc3-6-pin {
+			samsung,pins = "gpc3-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpc3-7-pin {
+			samsung,pins = "gpc3-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpk0-0-pin {
+			samsung,pins = "gpk0-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpk0-1-pin {
+			samsung,pins = "gpk0-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpk0-2-pin {
+			samsung,pins = "gpk0-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpk0-3-pin {
+			samsung,pins = "gpk0-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe1-0-pin {
+			samsung,pins = "gpe1-0";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe1-1-pin {
+			samsung,pins = "gpe1-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe1-2-pin {
+			samsung,pins = "gpe1-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe1-3-pin {
+			samsung,pins = "gpe1-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe1-4-pin {
+			samsung,pins = "gpe1-4";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe1-5-pin {
+			samsung,pins = "gpe1-5";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe1-6-pin {
+			samsung,pins = "gpe1-6";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe1-7-pin {
+			samsung,pins = "gpe1-7";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe2-4-pin {
+			samsung,pins = "gpe2-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe2-5-pin {
+			samsung,pins = "gpe2-5";
+			samsung,pin-con-pdn = <1>;
+			samsung,pin-pud-pdn = <3>;
+		};
+
+		gpe2-6-pin {
+			samsung,pins = "gpe2-6";
+			samsung,pin-con-pdn = <1>;
+			samsung,pin-pud-pdn = <3>;
+		};
+
+		gpe2-7-pin {
+			samsung,pins = "gpe2-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe3-0-pin {
+			samsung,pins = "gpe3-0";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe3-1-pin {
+			samsung,pins = "gpe3-1";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe3-4-pin {
+			samsung,pins = "gpe3-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe3-5-pin {
+			samsung,pins = "gpe3-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe3-6-pin {
+			samsung,pins = "gpe3-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe3-7-pin {
+			samsung,pins = "gpe3-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe4-0-pin {
+			samsung,pins = "gpe4-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe4-1-pin {
+			samsung,pins = "gpe4-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe4-2-pin {
+			samsung,pins = "gpe4-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe4-3-pin {
+			samsung,pins = "gpe4-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe4-4-pin {
+			samsung,pins = "gpe4-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe4-5-pin {
+			samsung,pins = "gpe4-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe4-6-pin {
+			samsung,pins = "gpe4-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe4-7-pin {
+			samsung,pins = "gpe4-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe5-0-pin {
+			samsung,pins = "gpe5-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe5-1-pin {
+			samsung,pins = "gpe5-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe5-2-pin {
+			samsung,pins = "gpe5-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe5-3-pin {
+			samsung,pins = "gpe5-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe5-4-pin {
+			samsung,pins = "gpe5-4";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe5-5-pin {
+			samsung,pins = "gpe5-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe5-6-pin {
+			samsung,pins = "gpe5-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe5-7-pin {
+			samsung,pins = "gpe5-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe6-0-pin {
+			samsung,pins = "gpe6-0";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe6-1-pin {
+			samsung,pins = "gpe6-1";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe6-2-pin {
+			samsung,pins = "gpe6-2";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe6-3-pin {
+			samsung,pins = "gpe6-3";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpe6-4-pin {
+			samsung,pins = "gpe6-4";
+			samsung,pin-con-pdn = <0>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe6-5-pin {
+			samsung,pins = "gpe6-5";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe6-6-pin {
+			samsung,pins = "gpe6-6";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpe6-7-pin {
+			samsung,pins = "gpe6-7";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpf0-0-pin {
+			samsung,pins = "gpf0-0";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpg0-1-pin {
+			samsung,pins = "gpg0-1";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+
+		gpf0-3-pin {
+			samsung,pins = "gpf0-3";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpb0-1-pin {
+			samsung,pins = "gpb0-1";
+			samsung,pin-con-pdn = <3>;
+			samsung,pin-pud-pdn = <0>;
+		};
+
+		gpb0-2-pin {
+			samsung,pins = "gpb0-2";
+			samsung,pin-con-pdn = <2>;
+			samsung,pin-pud-pdn = <1>;
+		};
+	};
+};
+
+&pmu_system_controller {
+	exynos8895_pm: power-management {
+		compatible = "samsung,exynos8895-pm";
+		vdd-mldo-supply = <&buck11_reg>;
+		vdd-lldo1-supply = <&buck8_reg>;
+		vdd-lldo2-supply = <&buck9_reg>;
+		vdd-lldo3-supply = <&buck10_reg>;
+		samsung,acpm = <&acpm_ipc>;
+		samsung,sicd-veto =
+			<&pwm E8895_SICD_VETO_PWM>,
+			<&adc E8895_SICD_VETO_CLK>,
+			<&hsi2c_1 E8895_SICD_VETO_I2C>,
+			<&hsi2c_2 E8895_SICD_VETO_I2C>,
+			<&hsi2c_3 E8895_SICD_VETO_I2C>,
+			<&hsi2c_4 E8895_SICD_VETO_I2C>,
+			<&hsi2c_5 E8895_SICD_VETO_I2C>,
+			<&hsi2c_6 E8895_SICD_VETO_I2C>,
+			<&hsi2c_7 E8895_SICD_VETO_I2C>,
+			<&hsi2c_8 E8895_SICD_VETO_I2C>,
+			<&hsi2c_9 E8895_SICD_VETO_I2C>,
+			<&hsi2c_10 E8895_SICD_VETO_I2C>,
+			<&hsi2c_11 E8895_SICD_VETO_I2C>,
+			<&hsi2c_12 E8895_SICD_VETO_I2C>,
+			<&hsi2c_13 E8895_SICD_VETO_I2C>,
+			<&hsi2c_14 E8895_SICD_VETO_I2C>,
+			<&hsi2c_15 E8895_SICD_VETO_I2C>,
+			<&hsi2c_16 E8895_SICD_VETO_I2C>,
+			<&hsi2c_17 E8895_SICD_VETO_I2C>,
+			<&hsi2c_18 E8895_SICD_VETO_I2C>,
+			<&hsi2c_19 E8895_SICD_VETO_I2C>,
+			<&hsi2c_20 E8895_SICD_VETO_I2C>,
+			<&hsi2c_21 E8895_SICD_VETO_I2C>,
+			<&hsi2c_22 E8895_SICD_VETO_I2C>,
+			<&hsi2c_23 E8895_SICD_VETO_I2C>,
+			<&hsi2c_24 E8895_SICD_VETO_I2C>,
+			<&hsi2c_25 E8895_SICD_VETO_I2C>,
+			<&hsi2c_26 E8895_SICD_VETO_I2C>,
+			<&hsi2c_27 E8895_SICD_VETO_I2C>,
+			<&hsi2c_28 E8895_SICD_VETO_I2C>,
+			<&hsi2c_29 E8895_SICD_VETO_I2C>,
+			<&hsi2c_30 E8895_SICD_VETO_I2C>,
+			<&hsi2c_31 E8895_SICD_VETO_I2C>,
+			<&hsi2c_32 E8895_SICD_VETO_I2C>,
+			<&spi_0 E8895_SICD_VETO_RPM>,
+			<&spi_1 E8895_SICD_VETO_RPM>,
+			<&spi_2 E8895_SICD_VETO_RPM>,
+			<&spi_3 E8895_SICD_VETO_RPM>,
+			<&spi_4 E8895_SICD_VETO_RPM>,
+			<&spi_5 E8895_SICD_VETO_RPM>,
+			<&spi_6 E8895_SICD_VETO_RPM>,
+			<&spi_7 E8895_SICD_VETO_RPM>,
+			<&spi_8 E8895_SICD_VETO_RPM>,
+			<&spi_9 E8895_SICD_VETO_RPM>,
+			<&spi_10 E8895_SICD_VETO_RPM>,
+			<&spi_11 E8895_SICD_VETO_RPM>,
+			<&spi_12 E8895_SICD_VETO_RPM>,
+			<&spi_13 E8895_SICD_VETO_RPM>,
+			<&spi_14 E8895_SICD_VETO_RPM>,
+			<&spi_15 E8895_SICD_VETO_RPM>,
+			<&ufs E8895_SICD_VETO_CLK>,
+			<&mmc E8895_SICD_VETO_RPM>,
+			<&usbdrd_dwc3 E8895_SICD_VETO_RPM>,
+			<&pcie0 E8895_SICD_VETO_RPM>,
+			<&serial_1 E8895_SICD_VETO_CLK>;
+	};
+};
