@@ -1668,6 +1668,40 @@
 			interrupts = <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>;
 		};
 
+		ufs: ufs@11120000 {
+			compatible = "samsung,exynos8895-ufs";
+			reg = <0x11120000 0x200>,
+			      <0x11121100 0x200>,
+			      <0x11110000 0x8000>,
+			      <0x11130000 0x100>;
+			reg-names = "hci", "vs_hci", "unipro", "ufsp";
+			interrupts = <GIC_SPI 334 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_fsys0 CLK_GOUT_FSYS0_UFS_EMBD_I_ACLK>,
+				 <&cmu_fsys0 CLK_GOUT_FSYS0_UFS_EMBD_I_CLK_UNIPRO>,
+				 <&cmu_fsys0 CLK_GOUT_FSYS0_UFS_EMBD_I_FMP_CLK>;
+			clock-names = "core_clk", "sclk_unipro_main", "fmp";
+			freq-table-hz = <0 0>, <0 0>, <0 0>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&ufs_rst_n &ufs_refclk_out>;
+			phys = <&ufs_phy>;
+			phy-names = "ufs-phy";
+			samsung,sysreg = <&syscon_fsys0 0x700>;
+			dma-coherent;
+			ufs-pm-qos-int = <400000>;
+			status = "disabled";
+		};
+
+		ufs_phy: phy@11124000 {
+			compatible = "samsung,exynos8895-ufs-phy";
+			reg = <0x11124000 0x800>;
+			reg-names = "phy-pma";
+			clocks = <&oscclk>;
+			clock-names = "ref_clk";
+			samsung,pmu-syscon = <&pmu_system_controller 0x724>;
+			#phy-cells = <0>;
+			status = "disabled";
+		};
+
 		cmu_fsys1: clock-controller@11400000 {
 			compatible = "samsung,exynos8895-cmu-fsys1";
 			reg = <0x11400000 0x8000>;
