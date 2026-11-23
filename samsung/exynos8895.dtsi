@@ -2254,3 +2254,8 @@
 
 #include "exynos8895-pinctrl.dtsi"
 #include "arm/samsung/exynos-syscon-restart.dtsi"
+
+&poweroff {
+	mask = <0x100>;
+	value = <0x0>;
+};
