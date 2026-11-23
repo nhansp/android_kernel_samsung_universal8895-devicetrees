@@ -1,0 +1,55 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) NFC
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&gpf0 {
+	mst-pwr-en-hog {
+		gpio-hog;
+		gpios = <0 GPIO_ACTIVE_HIGH>;
+		output-low;
+		line-name = "mst-pwr-en";
+	};
+};
+
+&hsi2c_26 {
+	nfc@27 {
+		compatible = "samsung,sec-nfc";
+		reg = <0x27>;
+		interrupt-parent = <&gpa1>;
+		interrupts = <2 IRQ_TYPE_EDGE_RISING>;
+		sec-nfc,ven-gpio = <&gpa4 5 GPIO_ACTIVE_HIGH>;
+		sec-nfc,irq-gpio = <&gpa1 2 GPIO_ACTIVE_HIGH>;
+		sec-nfc,firm-gpio = <&gpe6 4 GPIO_ACTIVE_HIGH>;
+		sec-nfc,clk_req-gpio = <&gpa2 7 GPIO_ACTIVE_HIGH>;
+		sec-nfc,nfc_pvdd = "VDD_NFC_1P8";
+		nfc-pvdd-supply = <&ldo39_reg>;
+		clocks = <&pmu_system_controller 1>;
+		clock-names = "oscclk_nfc";
+		sec-nfc,nfc_ap_clk;
+		sec-nfc,ldo_control;
+		pinctrl-names = "default";
+		pinctrl-0 = <&nfc_en &nfc_firm>;
+	};
+};
+
+&pinctrl_alive {
+	nfc_en: nfc-en-pins {
+		samsung,pins = "gpa4-5";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-val = <1>;
+	};
+};
+
+&pinctrl_peric1 {
+	nfc_firm: nfc-firm-pins {
+		samsung,pins = "gpe6-4";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-val = <0>;
+	};
+};
