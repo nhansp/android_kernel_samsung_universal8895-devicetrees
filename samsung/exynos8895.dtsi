@@ -2563,9 +2563,36 @@
 			status = "disabled";
 		};
 
+		syscon_abox: syscon@13e20000 {
+			compatible = "syscon";
+			reg = <0x13e20000 0x1000>;
+			status = "disabled";
+		};
+
+		sysmmu_abox: iommu@13e30000 {
+			compatible = "samsung,exynos-sysmmu";
+			reg = <0x13e30000 0x3000>;
+			interrupts = <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_abox CLK_GOUT_ABOX_SMMU_ACLK>,
+				 <&cmu_abox CLK_GOUT_ABOX_SMMU_PCLK>;
+			clock-names = "aclk", "pclk";
+			power-domains = <&pd_abox>;
+			samsung,no-suspend;
+			#iommu-cells = <0>;
+			status = "disabled";
+		};
+
 		pinctrl_abox: pinctrl@13e60000 {
 			compatible = "samsung,exynos8895-pinctrl";
 			reg = <0x13e60000 0x1000>;
+		};
+
+		abox_gic: interrupt-controller@13ef1000 {
+			compatible = "samsung,exynos8895-abox-gic";
+			reg = <0x13ef1000 0x1000>, <0x13ef2000 0x1004>;
+			reg-names = "gicd", "gicc";
+			interrupts = <GIC_SPI 442 IRQ_TYPE_EDGE_RISING>;
+			status = "disabled";
 		};
 
 		cmu_vts: clock-controller@14000000 {
@@ -2575,6 +2602,22 @@
 			clocks = <&oscclk>;
 			clock-names = "oscclk";
 			power-domains = <&pd_vts>;
+			status = "disabled";
+		};
+
+		syscon_vts: syscon@14020000 {
+			compatible = "syscon";
+			reg = <0x14020000 0x1000>;
+			status = "disabled";
+		};
+
+		vts_mailbox: mailbox@14040000 {
+			compatible = "samsung,exynos8895-vts-mailbox";
+			reg = <0x14040000 0x10000>;
+			reg-names = "sfr";
+			interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-controller;
+			#interrupt-cells = <1>;
 			status = "disabled";
 		};
 
@@ -2732,6 +2775,9 @@
 			#power-domain-cells = <0>;
 			label = "abox";
 			samsung,pmu-syscon = <&pmu_system_controller>;
+			samsung,sysreg = <&syscon_abox>;
+			clocks = <&cmu_top CLK_DOUT_CMU_ABOX_CPUABOX>;
+			clock-names = "bus";
 			status = "disabled";
 		};
 
@@ -2847,6 +2893,8 @@
 			reg = <0x164841a0 0x20>;
 			#power-domain-cells = <0>;
 			label = "vts";
+			samsung,pmu-syscon = <&pmu_system_controller>;
+			samsung,sysreg = <&syscon_vts>;
 			status = "disabled";
 		};
 
