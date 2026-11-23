@@ -27,6 +27,7 @@
 		pinctrl5 = &pinctrl_busc;
 		pinctrl6 = &pinctrl_peric0;
 		pinctrl7 = &pinctrl_peric1;
+		scaler0 = &scaler;
 	};
 
 	cpus {
@@ -2318,6 +2319,83 @@
 			status = "disabled";
 		};
 
+		syscon_g2d: syscon@13a20000 {
+			compatible = "samsung,exynos8895-g2d-sysreg", "syscon";
+			reg = <0x13a20000 0x1000>;
+		};
+
+		g2d: g2d@13a30000 {
+			compatible = "samsung,exynos8895-g2d";
+			reg = <0x13a30000 0x1000>;
+			interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_g2d CLK_GOUT_G2D_CLK>;
+			clock-names = "gate";
+			power-domains = <&pd_g2d>;
+			iommus = <&sysmmu_g2dd0>, <&sysmmu_g2dd1>;
+			samsung,hw-ppc = <2800 2400 3800>;
+			samsung,skia-qos-table = <0 0 1014000>, <0 0 1014000>, <0 0 845000>,
+						 <0 0 845000>, <0 0 676000>, <0 0 0>;
+			status = "disabled";
+		};
+
+		sysmmu_g2dd0: iommu@13a60000 {
+			compatible = "samsung,exynos-sysmmu";
+			reg = <0x13a60000 0x3000>;
+			interrupts = <GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_g2d CLK_GOUT_G2D_SMMU_G2DD0_ACLK>,
+				 <&cmu_g2d CLK_GOUT_G2D_SMMU_G2DD0_PCLK_NONSECURE>;
+			clock-names = "aclk", "pclk";
+			power-domains = <&pd_g2d>;
+			#iommu-cells = <0>;
+			status = "disabled";
+		};
+
+		sysmmu_g2dd1: iommu@13a70000 {
+			compatible = "samsung,exynos-sysmmu";
+			reg = <0x13a70000 0x3000>;
+			interrupts = <GIC_SPI 218 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_g2d CLK_GOUT_G2D_SMMU_G2DD1_ACLK>,
+				 <&cmu_g2d CLK_GOUT_G2D_SMMU_G2DD1_PCLK_NONSECURE>;
+			clock-names = "aclk", "pclk";
+			power-domains = <&pd_g2d>;
+			#iommu-cells = <0>;
+			status = "disabled";
+		};
+
+		smfc: jpeg@13b00000 {
+			compatible = "samsung,exynos8895-jpeg";
+			reg = <0x13b00000 0x1000>;
+			interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_g2d CLK_GOUT_G2D_JPEG_I_SMFC_CLK>;
+			clock-names = "gate";
+			iommus = <&sysmmu_g2dd2>;
+			power-domains = <&pd_g2d>;
+			status = "disabled";
+		};
+
+		scaler: scaler@13b10000 {
+			compatible = "samsung,exynos8895-scaler";
+			reg = <0x13b10000 0x1300>;
+			interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_g2d CLK_GOUT_G2D_M2MSCALER_ACLK>;
+			clock-names = "gate";
+			samsung,iommu-proxy = <&smfc>;
+			power-domains = <&pd_g2d>;
+			status = "disabled";
+		};
+
+		sysmmu_g2dd2: iommu@13b50000 {
+			compatible = "samsung,exynos-sysmmu";
+			reg = <0x13b50000 0x3000>;
+			interrupts = <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cmu_g2d CLK_GOUT_G2D_SMMU_G2DD2_ACLK>,
+				 <&cmu_g2d CLK_GOUT_G2D_SMMU_G2DD2_PCLK_NONSECURE>;
+			clock-names = "aclk", "pclk";
+			power-domains = <&pd_g2d>;
+			#iommu-cells = <0>;
+			status = "disabled";
+		};
+
 		cmu_mfc: clock-controller@13c00000 {
 			compatible = "samsung,exynos8895-cmu-mfc";
 			reg = <0x13c00000 0x8000>;
@@ -2563,6 +2641,7 @@
 			clock-names = "bus";
 			#power-domain-cells = <0>;
 			label = "g2d";
+			samsung,sysreg = <&syscon_g2d>;
 			status = "disabled";
 		};
 
