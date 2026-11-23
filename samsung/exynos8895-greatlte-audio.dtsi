@@ -1,0 +1,725 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) audio
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	abox: abox@13e50000 {
+		compatible = "samsung,exynos8895-abox";
+		reg = <0x0 0x13e50000 0x10000>, <0x0 0x13f00000 0x31000>;
+		reg-names = "sfr", "sram";
+		#address-cells = <2>;
+		#size-cells = <1>;
+		ranges;
+		power-domains = <&pd_abox>;
+		iommus = <&sysmmu_abox>;
+		memory-region = <&abox_rmem>;
+		samsung,pmu-syscon = <&pmu_system_controller>;
+		samsung,sysreg = <&syscon_abox>;
+		samsung,abox-gic = <&abox_gic>;
+		samsung,vts = <&vts>;
+		samsung,ipc-tx-offset = <0x30000>;
+		samsung,ipc-rx-offset = <0x30300>;
+		samsung,ipc-tx-ack-offset = <0x302fc>;
+		samsung,ipc-rx-ack-offset = <0x305fc>;
+		samsung,mailbox-offset = <0x30600>;
+		samsung,pm-qos-int = <533000 400000 0 0 0>;
+		clocks = <&cmu_abox CLK_MOUT_ABOX_PLL_AUD>, <&cmu_abox CLK_DOUT_ABOX_PLL>,
+			 <&cmu_abox CLK_DOUT_ABOX_AUDIF>,
+			 <&cmu_abox CLK_DOUT_ABOX_UAIF0>, <&cmu_abox CLK_DOUT_ABOX_UAIF1>,
+			 <&cmu_abox CLK_DOUT_ABOX_UAIF2>, <&cmu_abox CLK_DOUT_ABOX_UAIF3>,
+			 <&cmu_abox CLK_DOUT_ABOX_UAIF4>, <&cmu_abox CLK_DOUT_ABOX_DSIF>,
+			 <&cmu_abox CLK_DOUT_ABOX_DMIC>,
+			 <&cmu_abox CLK_GOUT_ABOX_BCLK_UAIF0>, <&cmu_abox CLK_GOUT_ABOX_BCLK_UAIF1>,
+			 <&cmu_abox CLK_GOUT_ABOX_BCLK_UAIF2>, <&cmu_abox CLK_GOUT_ABOX_BCLK_UAIF3>,
+			 <&cmu_abox CLK_GOUT_ABOX_BCLK_UAIF4>, <&cmu_abox CLK_GOUT_ABOX_BCLK_DSIF>,
+			 <&cmu_abox CLK_FOUT_PLL_AUD>, <&oscclk>, <&cmu_abox CLK_DOUT_ABOX_BUS>;
+		clock-names = "pll", "ca7", "audif", "bclk0", "bclk1", "bclk2", "bclk3", "bclk4", "bclk5", "dmic",
+			      "bclk0_gate", "bclk1_gate", "bclk2_gate", "bclk3_gate", "bclk4_gate", "bclk5_gate",
+			      "pll_fout", "oscclk", "bus";
+		pinctrl-names = "active", "idle";
+		pinctrl-0 = <&aud_codec_mclk &aud_codec_bus &aud_spk_bus &aud_fm_bus &aud_bt_bus &aud_cdma_bus>;
+		pinctrl-1 = <&aud_codec_mclk_idle &aud_codec_bus_idle &aud_spk_bus_idle &aud_fm_bus_idle
+			    &aud_bt_bus_idle &aud_cdma_bus_idle>;
+		#sound-dai-cells = <1>;
+
+		abox_rdma0: abox_rdma@13e51000 {
+			compatible = "samsung,exynos8895-abox-rdma";
+			reg = <0x0 0x13e51000 0x100>;
+			samsung,id = <0>;
+			samsung,type = "normal";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_rdma1: abox_rdma@13e51100 {
+			compatible = "samsung,exynos8895-abox-rdma";
+			reg = <0x0 0x13e51100 0x100>;
+			samsung,id = <1>;
+			samsung,type = "normal";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_rdma2: abox_rdma@13e51200 {
+			compatible = "samsung,exynos8895-abox-rdma";
+			reg = <0x0 0x13e51200 0x100>;
+			samsung,id = <2>;
+			samsung,type = "normal";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_rdma3: abox_rdma@13e51300 {
+			compatible = "samsung,exynos8895-abox-rdma";
+			reg = <0x0 0x13e51300 0x100>;
+			samsung,id = <3>;
+			samsung,type = "sync";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_rdma4: abox_rdma@13e51400 {
+			compatible = "samsung,exynos8895-abox-rdma";
+			reg = <0x0 0x13e51400 0x100>;
+			samsung,id = <4>;
+			samsung,type = "call";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_rdma5: abox_rdma@13e51500 {
+			compatible = "samsung,exynos8895-abox-rdma";
+			reg = <0x0 0x13e51500 0x100>;
+			samsung,id = <5>;
+			samsung,type = "compress";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_rdma6: abox_rdma@13e51600 {
+			compatible = "samsung,exynos8895-abox-rdma";
+			reg = <0x0 0x13e51600 0x100>;
+			samsung,id = <6>;
+			samsung,type = "realtime";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_rdma7: abox_rdma@13e51700 {
+			compatible = "samsung,exynos8895-abox-rdma";
+			reg = <0x0 0x13e51700 0x100>;
+			samsung,id = <7>;
+			samsung,type = "realtime";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_wdma0: abox_wdma@13e52000 {
+			compatible = "samsung,exynos8895-abox-wdma";
+			reg = <0x0 0x13e52000 0x100>;
+			samsung,id = <0>;
+			samsung,type = "normal";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_wdma1: abox_wdma@13e52100 {
+			compatible = "samsung,exynos8895-abox-wdma";
+			reg = <0x0 0x13e52100 0x100>;
+			samsung,id = <1>;
+			samsung,type = "normal";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_wdma2: abox_wdma@13e52200 {
+			compatible = "samsung,exynos8895-abox-wdma";
+			reg = <0x0 0x13e52200 0x100>;
+			samsung,id = <2>;
+			samsung,type = "call";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_wdma3: abox_wdma@13e52300 {
+			compatible = "samsung,exynos8895-abox-wdma";
+			reg = <0x0 0x13e52300 0x100>;
+			samsung,id = <3>;
+			samsung,type = "realtime";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_wdma4: abox_wdma@13e52400 {
+			compatible = "samsung,exynos8895-abox-wdma";
+			reg = <0x0 0x13e52400 0x100>;
+			samsung,id = <4>;
+			samsung,type = "vi-sensing";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_effect: abox_effect@13f2e000 {
+			compatible = "samsung,exynos8895-abox-effect";
+			reg = <0x0 0x13f2e000 0x1000>;
+			reg-names = "reg";
+			#sound-dai-cells = <0>;
+		};
+
+		abox_debug@0 {
+			compatible = "samsung,exynos8895-abox-debug";
+		};
+
+		abox_vss@0 {
+			compatible = "samsung,exynos8895-abox-vss";
+		};
+
+		abox_adaptation: abox_adaptation {
+			compatible = "samsung,exynos8895-abox-adaptation";
+			#sound-dai-cells = <1>;
+		};
+
+		ext-bin {
+			bin0 {
+				samsung,name = "dsm.bin";
+				samsung,area = <1>;
+				samsung,offset = <0x502000>;
+			};
+
+			bin1 {
+				samsung,name = "AP_AUDIO_SLSI.bin";
+				samsung,area = <1>;
+				samsung,offset = <0x7f0000>;
+			};
+
+			bin2 {
+				samsung,name = "APBargeIn_AUDIO_SLSI.bin";
+				samsung,area = <1>;
+				samsung,offset = <0x7ec000>;
+			};
+
+			bin3 {
+				samsung,name = "SoundBoosterParam.bin";
+				samsung,area = <1>;
+				samsung,offset = <0x4fc000>;
+			};
+
+			bin4 {
+				samsung,name = "APBiBF_AUDIO_SLSI.bin";
+				samsung,area = <1>;
+				samsung,offset = <0x7ef000>;
+			};
+
+			bin5 {
+				samsung,name = "dsm_tune.bin";
+				samsung,area = <1>;
+				samsung,offset = <0x601000>;
+			};
+		};
+	};
+
+	vts: vts@14020000 {
+		compatible = "samsung,exynos8895-vts";
+		reg = <0x0 0x14020000 0x10000>, <0x0 0x14100000 0x59800>,
+		      <0x0 0x14070000 0x8>, <0x0 0x141f0000 0x50>;
+		reg-names = "sfr", "sram", "dmic", "gpr";
+		#address-cells = <2>;
+		#size-cells = <1>;
+		ranges;
+		power-domains = <&pd_vts>;
+		clocks = <&cmu_vts CLK_VTS_OSC>, <&cmu_vts CLK_DOUT_VTS_DMIC>,
+			 <&cmu_vts CLK_DOUT_VTS_DMICIF>, <&cmu_vts CLK_DOUT_VTS_DMIC_DIV2>;
+		clock-names = "rco", "dmic", "dmic_if", "dmic_sync";
+		samsung,mailbox = <&vts_mailbox>;
+		interrupt-parent = <&vts_mailbox>;
+		interrupts = <0>, <1>, <2>, <3>, <4>, <5>;
+		interrupt-names = "error", "boot_completed", "ipc_received", "voice_triggered",
+				  "trigger_period_elapsed", "record_period_elapsed";
+		pinctrl-names = "dmic_default", "amic_default", "idle";
+		pinctrl-0 = <&dmic_bus_clk &dmic_pdm>;
+		pinctrl-1 = <&amic_bus_clk &amic_pdm>;
+		pinctrl-2 = <&mic_bus_clk_idle &dmic_pdm_idle &amic_pdm_idle>;
+		samsung,pmu-syscon = <&pmu_system_controller>;
+		lpsd-gain = <0>;
+		dmic-gain = <0>;
+		amic-gain = <4>;
+		#sound-dai-cells = <1>;
+
+		vts_dma0: vts-dma-0 {
+			compatible = "samsung,exynos8895-vts-dma";
+			samsung,id = <0>;
+			samsung,type = "vts-trigger";
+			#sound-dai-cells = <0>;
+		};
+
+		vts_dma1: vts-dma-1 {
+			compatible = "samsung,exynos8895-vts-dma";
+			samsung,id = <1>;
+			samsung,type = "vts-record";
+			#sound-dai-cells = <0>;
+		};
+	};
+
+	sound {
+		compatible = "samsung,exynos8895-madera";
+		clocks = <&pmu_system_controller 0>;
+		clock-names = "xclkout";
+		cirrus,sysclk = <1 5 98304000>;
+		cirrus,asyncclk = <2 6 98304000>;
+		cirrus,dspclk = <8 5 147456000>;
+		cirrus,outclk = <9 2 0>;
+		cirrus,fll1-refclk = <1 1 26000000>;
+		cirrus,fll2-refclk = <2 9 26000000>;
+		samsung,routing =
+			"HEADSETMIC", "MICBIAS2A", "IN1BLN", "HEADSETMIC", "IN1BLP", "HEADSETMIC",
+			"DMIC1", "MICBIAS1A", "IN3L", "DMIC1",
+			"DMIC2", "MICBIAS1B", "IN2ALN", "DMIC2", "IN2ALP", "DMIC2", "VTS PAD DPDM", "DMIC1",
+			"RECEIVER", "HPOUT3L", "RECEIVER", "HPOUT3R", "RECEIVER", "HPOUT4L", "RECEIVER", "HPOUT4R",
+			"HEADPHONE", "HPOUT2L", "HEADPHONE", "HPOUT2R",
+			"BLUETOOTH SPK", "ABOX UAIF3 Playback", "ABOX UAIF3 Capture", "BLUETOOTH MIC",
+			"VOUTPUT", "ABOX UAIF0 Playback", "ABOX UAIF1 Capture", "VINPUT1", "ABOX UAIF4 Capture", "VINPUT2",
+			"SPEAKER", "HiFi Playback", "VOUTPUTCALL", "ABOX UAIF2 Playback", "ABOX UAIF2 Capture", "VINPUTCALL",
+			"VTS Virtual Output", "VTS Virtual Output Mux";
+		samsung,codec = <&abox &vts>;
+		samsung,aux = <&abox_effect>;
+
+		rdma@0 {
+			cpu { sound-dai = <&abox 6>;
+					   };
+			platform { sound-dai = <&abox_rdma0>;
+						};
+		};
+
+		rdma@1 {
+			cpu { sound-dai = <&abox 7>;
+					   };
+			platform { sound-dai = <&abox_rdma1>;
+						};
+		};
+
+		rdma@2 {
+			cpu { sound-dai = <&abox 8>;
+					   };
+			platform { sound-dai = <&abox_rdma2>;
+						};
+		};
+
+		rdma@3 {
+			cpu { sound-dai = <&abox 9>;
+					   };
+			platform { sound-dai = <&abox_rdma3>;
+						};
+		};
+
+		rdma@4 {
+			cpu { sound-dai = <&abox 10>;
+					   };
+			platform { sound-dai = <&abox_rdma4>;
+						};
+		};
+
+		rdma@5 {
+			cpu { sound-dai = <&abox 11>;
+					   };
+			platform { sound-dai = <&abox_rdma5>;
+						};
+		};
+
+		rdma@6 {
+			cpu { sound-dai = <&abox 12>;
+					   };
+			platform { sound-dai = <&abox_rdma6>;
+						};
+		};
+
+		rdma@7 {
+			cpu { sound-dai = <&abox 13>;
+					   };
+			platform { sound-dai = <&abox_rdma7>;
+						};
+		};
+
+		wdma@0 {
+			cpu { sound-dai = <&abox 14>;
+					   };
+			platform { sound-dai = <&abox_wdma0>;
+						};
+		};
+
+		wdma@1 {
+			cpu { sound-dai = <&abox 15>;
+					   };
+			platform { sound-dai = <&abox_wdma1>;
+						};
+		};
+
+		wdma@2 {
+			cpu { sound-dai = <&abox 16>;
+					   };
+			platform { sound-dai = <&abox_wdma2>;
+						};
+		};
+
+		wdma@3 {
+			cpu { sound-dai = <&abox 17>;
+					   };
+			platform { sound-dai = <&abox_wdma3>;
+						};
+		};
+
+		wdma@4 {
+			cpu { sound-dai = <&abox 18>;
+					   };
+			platform { sound-dai = <&abox_wdma4>;
+						};
+		};
+
+		uaif@0 {
+			cpu { sound-dai = <&abox 0>;
+					   };
+			codec { sound-dai = <&cs47l93 0>;
+					     };
+		};
+
+		uaif@1 {
+			cpu { sound-dai = <&abox 1>;
+					   };
+		};
+
+		uaif@2 {
+			cpu { sound-dai = <&abox 2>;
+					   };
+		};
+
+		uaif@3 {
+			cpu { sound-dai = <&abox 3>;
+					   };
+		};
+
+		uaif@4 {
+			cpu {
+				sound-dai = <&abox 4>;
+			};
+
+			platform {
+				sound-dai = <&abox_adaptation 0>;
+			};
+
+			codec {
+				sound-dai = <&max98506 0>;
+			};
+		};
+
+		dsif@0 {
+			cpu { sound-dai = <&abox 5>;
+					   };
+		};
+
+		internal@0 {
+			cpu { sound-dai = <&abox 19>;
+					   };
+		};
+
+		vts@0 {
+			cpu { sound-dai = <&vts 0>;
+					   };
+			platform { sound-dai = <&vts_dma0>;
+						};
+		};
+
+		vts@1 {
+			cpu { sound-dai = <&vts 1>;
+					   };
+			platform { sound-dai = <&vts_dma1>;
+						};
+		};
+	};
+};
+
+&abox_gic {
+	status = "okay";
+};
+
+&cmu_abox {
+	status = "okay";
+};
+
+&cmu_vts {
+	status = "okay";
+};
+
+&hsi2c_11 {
+	clock-frequency = <400000>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	max98506: amplifier@31 {
+		compatible = "maxim,max98506";
+		reg = <0x31>;
+		#sound-dai-cells = <1>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&max98506_ctl>;
+		maxim,spk-gain = <0x14>;
+		maxim,sysclk = <12288000>;
+		maxim,vmon_slot = <0>;
+		maxim,platform_info = <0x02 0x00 0x00 0x00 0x00 0x2a>;
+		maxim,boost_step = <15 15 15 15 15 15 15 15 15 15 15 15 15 15 2 0>;
+		maxim,adc_threshold = <7>;
+		maxim,registers-of-amp = <0x1f 0x00 0x21 0xc0 0x2d 0x14 0x2f 0x00>;
+	};
+};
+
+&pd_abox {
+	status = "okay";
+};
+
+&pd_vts {
+	status = "okay";
+};
+
+&pinctrl_abox {
+	status = "okay";
+
+	aud_codec_mclk: aud-codec-mclk-pins {
+		samsung,pins = "gph0-0";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_codec_mclk_idle: aud-codec-mclk-idle-pins {
+		samsung,pins = "gph0-0";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_codec_bus: aud-codec-bus-pins {
+		samsung,pins = "gph0-1", "gph0-2", "gph0-3", "gph0-4";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_codec_bus_idle: aud-codec-bus-idle-pins {
+		samsung,pins = "gph0-1", "gph0-2", "gph0-3", "gph0-4";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_spk_bus: aud-spk-bus-pins {
+		samsung,pins = "gph0-5", "gph0-6", "gph0-7";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_spk_bus_idle: aud-spk-bus-idle-pins {
+		samsung,pins = "gph0-5", "gph0-6", "gph0-7";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_fm_bus: aud-fm-bus-pins {
+		samsung,pins = "gph1-0", "gph1-1", "gph1-2";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_fm_bus_idle: aud-fm-bus-idle-pins {
+		samsung,pins = "gph1-0", "gph1-1", "gph1-2";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_bt_bus: aud-bt-bus-pins {
+		samsung,pins = "gph1-3", "gph1-4", "gph1-5", "gph1-6";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_bt_bus_idle: aud-bt-bus-idle-pins {
+		samsung,pins = "gph1-3", "gph1-4", "gph1-5", "gph1-6";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_cdma_bus: aud-cdma-bus-pins {
+		samsung,pins = "gph3-0", "gph3-1", "gph3-2", "gph3-3";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <1>;
+	};
+
+	aud_cdma_bus_idle: aud-cdma-bus-idle-pins {
+		samsung,pins = "gph3-0", "gph3-1", "gph3-2", "gph3-3";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <1>;
+	};
+};
+
+&pinctrl_alive {
+	codec_irq: codec-irq-pins {
+		samsung,pins = "gpa2-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+	};
+};
+
+&pinctrl_peric0 {
+	codec_reset: codec-reset-pins {
+		samsung,pins = "gpe7-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <3>;
+		samsung,pin-pud-pdn = <1>;
+		samsung,pin-val = <0>;
+	};
+
+	max98506_ctl: max98506-ctl-pins {
+		samsung,pins = "gpf1-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-con-pdn = <2>;
+		samsung,pin-pud-pdn = <0>;
+	};
+};
+
+&pinctrl_vts {
+	status = "okay";
+
+	dmic_bus_clk: dmic-bus-clk-pins {
+		samsung,pins = "gph2-2";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <1>;
+		samsung,pin-con-pdn = <2>;
+	};
+
+	amic_bus_clk: amic-bus-clk-pins {
+		samsung,pins = "gph2-2";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <0>;
+		samsung,pin-con-pdn = <2>;
+	};
+
+	mic_bus_clk_idle: mic-bus-clk-idle-pins {
+		samsung,pins = "gph2-2";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <0>;
+		samsung,pin-con-pdn = <2>;
+	};
+
+	dmic_pdm: dmic-pdm-pins {
+		samsung,pins = "gph2-1";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <1>;
+		samsung,pin-con-pdn = <2>;
+	};
+
+	dmic_pdm_idle: dmic-pdm-idle-pins {
+		samsung,pins = "gph2-1";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <0>;
+		samsung,pin-con-pdn = <2>;
+	};
+
+	amic_pdm: amic-pdm-pins {
+		samsung,pins = "gph2-0";
+		samsung,pin-function = <2>;
+		samsung,pin-pud = <0>;
+		samsung,pin-con-pdn = <2>;
+	};
+
+	amic_pdm_idle: amic-pdm-idle-pins {
+		samsung,pins = "gph2-0";
+		samsung,pin-function = <0>;
+		samsung,pin-pud = <0>;
+		samsung,pin-con-pdn = <2>;
+	};
+};
+
+&spi_3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi3_bus &spi3_cs>;
+	cs-gpios = <&gpd1 6 GPIO_ACTIVE_LOW>;
+	status = "okay";
+
+	cs47l93: codec@0 {
+		compatible = "cirrus,cs47l93";
+		reg = <0>;
+		spi-max-frequency = <25000000>;
+		interrupt-parent = <&gpa2>;
+		interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
+		interrupt-controller;
+		#interrupt-cells = <2>;
+		gpio-controller;
+		#gpio-cells = <2>;
+		#sound-dai-cells = <1>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&codec_reset &codec_irq>;
+		AVDD-supply = <&ldo32_reg>;
+		DBVDD1-supply = <&ldo32_reg>;
+		CPVDD1-supply = <&ldo32_reg>;
+		CPVDD2-supply = <&ldo33_reg>;
+		DCVDD-supply = <&ldo33_reg>;
+		reset-gpios = <&gpe7 0 GPIO_ACTIVE_HIGH>;
+		clocks = <&pmu_system_controller 0>;
+		clock-names = "mclk1";
+		assigned-clocks = <&pmu_system_controller 0>;
+		assigned-clock-parents = <&oscclk>;
+		cirrus,micbias1 = <1800 0 1 1 1 1 1 0>;
+		cirrus,micbias2 = <2800 0 1 1 1 1 1 0>;
+		cirrus,dmic-ref = <0 1 1 0>;
+		cirrus,inmode = <0 0 0 0 0 0 0 0>;
+		cirrus,out-mono = <0 0 1 1 0 0>;
+		cirrus,auxpdm-falling-edge;
+		cirrus,gpio-defaults = <0xffffffff 0xffffffff 0xffffffff 0xffffffff 0x2000 0x6000 0x2000 0x6000
+					0x2000 0x6000 0x2000 0x6000 0x2000 0x6000 0x2000 0x6000 0x2001 0x9000
+					0x2001 0x9000 0x2001 0x9000 0x2000 0x6000 0x2000 0x6000 0x2000 0x6000
+					0x2000 0x6000 0x2000 0x6000>;
+		cirrus,gpsw = <3>;
+
+		micvdd {
+			regulator-min-microvolt = <3000000>;
+			regulator-max-microvolt = <3000000>;
+		};
+
+		controller-data {
+			samsung,spi-feedback-delay = <1>;
+		};
+
+		cirrus,accdet {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			acc@1 {
+				reg = <2>;
+				cirrus,micd-bias-start-time = <1>;
+				cirrus,micd-pol-gpios = <0>;
+				cirrus,micd-rate = <7>;
+				cirrus,micd-detect-debounce-ms = <300>;
+				cirrus,micd-clamp-mode = <8>;
+				cirrus,jd-use-jd2;
+				cirrus,hs-mic = <1>;
+				cirrus,init-delay-ms = <30>;
+				cirrus,micd-dbtime = <1>;
+				cirrus,micd-timeout-ms = <1000>;
+				cirrus,micd-force-micbias;
+				cirrus,hpdet-short-circuit-imp = <2>;
+				cirrus,micd-ranges = <116 226  173 582  321 115  752 114  1257 217>;
+				cirrus,micd-software-compare;
+				cirrus,micd-open-circuit-declare = <1>;
+				cirrus,jd-wake-time = <5000>;
+				cirrus,hpdet-ext-res = <3400>;
+				cirrus,moisture-pin = <7>;
+				cirrus,moisture-imp = <2000>;
+				cirrus,moisture-debounce = <40>;
+				cirrus,micd-configs = <0 1 4 0 1>;
+				cirrus,hpd-pins = <2 5 0 0>;
+			};
+		};
+	};
+};
+
+&syscon_abox {
+	status = "okay";
+};
+
+&syscon_vts {
+	status = "okay";
+};
+
+&sysmmu_abox {
+	status = "okay";
+};
+
+&vts_mailbox {
+	status = "okay";
+};
