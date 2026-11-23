@@ -1736,6 +1736,7 @@
 				 <&cmu_fsys1 CLK_GOUT_FSYS1_MMC_CARD_SDCLKIN>;
 			clock-names = "biu", "ciu";
 			fifo-depth = <64>;
+			qos-int-level = <400000>;
 			interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>;
 			#address-cells = <1>;
 			#size-cells = <0>;
