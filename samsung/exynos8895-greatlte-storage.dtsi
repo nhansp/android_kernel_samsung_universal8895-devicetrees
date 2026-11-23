@@ -1,0 +1,60 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) storage
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	ufs_vcc: regulator-ufs-vcc {
+		compatible = "regulator-fixed";
+		regulator-name = "ufs-vcc";
+		gpio = <&gpg0 0 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-boot-on;
+	};
+
+	vmmc_sd: regulator-vmmc-sd {
+		compatible = "regulator-fixed";
+		regulator-name = "vmmc";
+		regulator-min-microvolt = <2800000>;
+		regulator-max-microvolt = <2800000>;
+		gpio = <&gpb1 1 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+};
+
+&mmc {
+	pinctrl-names = "default";
+	pinctrl-0 = <&sd2_clk &sd2_cmd &sd2_bus1 &sd2_bus4 &sd2_cd>;
+	bus-width = <4>;
+	cap-sd-highspeed;
+	cd-gpios = <&gpa1 5 GPIO_ACTIVE_LOW>;
+	card-detect-delay = <200>;
+	clock-frequency = <800000000>;
+	disable-wp;
+	samsung,dw-mshc-ciu-div = <3>;
+	samsung,dw-mshc-sdr-timing = <0 2>;
+	samsung,dw-mshc-ddr-timing = <1 2>;
+	vmmc-supply = <&vmmc_sd>;
+	vqmmc-supply = <&vqmmc_sd>;
+	status = "okay";
+};
+
+&pinctrl_alive {
+	sd2_cd: sd2-cd-pins {
+		samsung,pins = "gpa1-5";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+};
+
+&ufs {
+	vcc-supply = <&ufs_vcc>;
+	status = "okay";
+};
+
+&ufs_phy {
+	status = "okay";
+};
