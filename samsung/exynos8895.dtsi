@@ -1599,6 +1599,49 @@
 			status = "disabled";
 		};
 
+		usbdrd: usb@10c00000 {
+			compatible = "samsung,exynos8895-dwusb3";
+			ranges = <0x0 0x10c00000 0x10000>;
+			/* The USBTVH gates have no other user, and the core needs them. */
+			clocks = <&cmu_fsys0 CLK_GOUT_FSYS0_USBTV_I_USB30DRD_ACLK>,
+				 <&cmu_fsys0 CLK_GOUT_FSYS0_USBTV_I_USB30DRD_REF_CLK>,
+				 <&cmu_fsys0 CLK_GOUT_FSYS0_USBTV_I_USBTVH_AHB_CLK>,
+				 <&cmu_fsys0 CLK_GOUT_FSYS0_USBTV_I_USBTVH_CORE_CLK>;
+			clock-names = "aclk", "ref", "usbtvh_ahb", "usbtvh_core";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			status = "disabled";
+
+			usbdrd_dwc3: usb@0 {
+				compatible = "snps,dwc3";
+				reg = <0x0 0x10000>;
+				interrupts = <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>;
+				clocks = <&cmu_fsys0 CLK_GOUT_FSYS0_USBTV_I_USB30DRD_SUSPEND_CLK>;
+				clock-names = "suspend";
+				phys = <&usbdrd_phy 0>, <&usbdrd_phy 1>;
+				phy-names = "usb2-phy", "usb3-phy";
+				snps,dis_u2_susphy_quirk;
+				snps,dis_enblslpm_quirk;
+				snps,usb2-gadget-lpm-disable;
+				snps,dis-u1-entry-quirk;
+				snps,dis-u2-entry-quirk;
+				snps,dis_rxdet_inp3_quirk;
+			};
+		};
+
+		usbdrd_phy: phy@10e00000 {
+			compatible = "samsung,exynos8895-usbdrd-phy";
+			reg = <0x10e00000 0x100>,
+			      <0x10e10000 0x100>,
+			      <0x10e50070 0x10>;
+			clocks = <&cmu_fsys0 CLK_GOUT_FSYS0_USBTV_I_USB30DRD_ACLK>,
+				 <&oscclk>;
+			clock-names = "phy", "ref";
+			samsung,pmu-syscon = <&pmu_system_controller>;
+			#phy-cells = <1>;
+			status = "disabled";
+		};
+
 		cmu_fsys0: clock-controller@11000000 {
 			compatible = "samsung,exynos8895-cmu-fsys0";
 			reg = <0x11000000 0x8000>;
