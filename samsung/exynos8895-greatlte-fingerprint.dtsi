@@ -1,0 +1,68 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) fingerprint sensor
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	fingerprint {
+		compatible = "samsung,exynos8895-vfsspi";
+		drdy-gpios = <&gpa1 3 GPIO_ACTIVE_HIGH>;
+		ldo-gpios = <&gpe1 0 GPIO_ACTIVE_HIGH>;
+		interrupts-extended = <&gpa1 3 IRQ_TYPE_EDGE_RISING>;
+		clocks = <&cmu_peric0 CLK_GOUT_PERIC0_USI00_I_PCLK>,
+			 <&cmu_peric0 CLK_GOUT_PERIC0_USI00_I_SCLK_USI>,
+			 <&cmu_top CLK_DOUT_CMU_PERIC0_USI00>,
+			 <&cmu_peric0 CLK_GOUT_PERIC0_USI00_QCH>;
+		clock-names = "pclk", "sclk_gate", "sclk", "qch";
+		assigned-clocks = <&cmu_top CLK_MOUT_CMU_PERIC0_USI00>, <&cmu_top CLK_DOUT_CMU_PERIC0_USI00>;
+		assigned-clock-parents = <&oscclk>, <0>;
+		assigned-clock-rates = <0>, <26000000>;
+		spi-max-frequency = <13000000>;
+		samsung,orient = <1>;
+		samsung,detect-mode = <1>;
+		samsung,chip-id = "NAMSAN";
+		pinctrl-names = "default", "sleep", "idle";
+		pinctrl-0 = <&spi2_bus &btp_irq &btp_ldo>;
+		pinctrl-1 = <&btp_irqsleep>;
+		pinctrl-2 = <&btp_irqidle>;
+	};
+};
+
+&pinctrl_alive {
+	btp_irq: btp-irq-pins {
+		samsung,pins = "gpa1-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	btp_irqsleep: btp-irqsleep-pins {
+		samsung,pins = "gpa1-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	btp_irqidle: btp-irqidle-pins {
+		samsung,pins = "gpa1-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+};
+
+&pinctrl_peric1 {
+	btp_ldo: btp-ldo-pins {
+		samsung,pins = "gpe1-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+};
+
+&spi_2 {
+	status = "disabled";
+};
