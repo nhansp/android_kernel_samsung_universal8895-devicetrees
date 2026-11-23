@@ -1,0 +1,169 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) thermal sensors
+ */
+
+/ {
+	battery_ntc: thermal-sensor-battery {
+		compatible = "generic-adc-thermal";
+		#thermal-sensor-cells = <0>;
+		io-channels = <&adc 4>;
+		io-channel-names = "sensor-channel";
+		temperature-lookup-table = <
+			(-20000) 3686	(-15000) 3575	(-10000) 3445	(-5000) 3293
+			0 3122		5000 2932	10000 2726	15000 2512
+			20000 2291	25000 2048	30000 1811	35000 1586
+			40000 1378	45000 1189	50000 1021	55000 887
+			60000 769	65000 655	70000 558	75000 474
+			80000 404	85000 345	90000 294 >;
+	};
+
+	usb_ntc: thermal-sensor-usb {
+		compatible = "generic-adc-thermal";
+		#thermal-sensor-cells = <0>;
+		io-channels = <&adc 1>;
+		io-channel-names = "sensor-channel";
+		temperature-lookup-table = <
+			(-20000) 3686	(-15000) 3575	(-10000) 3445	(-5000) 3293
+			0 3122		5000 2932	10000 2726	15000 2512
+			20000 2291	25000 2048	30000 1811	35000 1586
+			40000 1378	45000 1189	50000 1021	55000 887
+			60000 769	65000 655	70000 558	75000 474
+			80000 404	85000 345	90000 294 >;
+	};
+
+	chg_ntc: thermal-sensor-charger {
+		compatible = "generic-adc-thermal";
+		#thermal-sensor-cells = <0>;
+		io-channels = <&adc 3>;
+		io-channel-names = "sensor-channel";
+		temperature-lookup-table = <
+			(-20000) 3686	(-15000) 3575	(-10000) 3445	(-5000) 3293
+			0 3122		5000 2932	10000 2726	15000 2512
+			20000 2291	25000 2048	30000 1811	35000 1586
+			40000 1378	45000 1189	50000 1021	55000 887
+			60000 769	65000 655	70000 558	75000 474
+			80000 404	85000 345	90000 294 >;
+	};
+
+	ap_therm: thermal-sensor-ap {
+		compatible = "generic-adc-thermal";
+		#thermal-sensor-cells = <0>;
+		io-channels = <&adc 0>;
+		io-channel-names = "sensor-channel";
+		temperature-lookup-table = <
+			(-20000) 3686	(-15000) 3575	(-10000) 3445	(-5000) 3293
+			0 3122		5000 2932	10000 2726	15000 2512
+			20000 2291	25000 2048	30000 1811	35000 1586
+			40000 1378	45000 1189	50000 1021	55000 887
+			60000 769	65000 655	70000 558	75000 474
+			80000 404	85000 345	90000 294 >;
+	};
+
+	wf_therm: thermal-sensor-wf {
+		compatible = "generic-adc-thermal";
+		#thermal-sensor-cells = <0>;
+		io-channels = <&adc 7>;
+		io-channel-names = "sensor-channel";
+		temperature-lookup-table = <
+			(-20000) 3686	(-15000) 3575	(-10000) 3445	(-5000) 3293
+			0 3122		5000 2932	10000 2726	15000 2512
+			20000 2291	25000 2048	30000 1811	35000 1586
+			40000 1378	45000 1189	50000 1021	55000 887
+			60000 769	65000 655	70000 558	75000 474
+			80000 404	85000 345	90000 294 >;
+	};
+
+	pa_therm: thermal-sensor-pa {
+		compatible = "generic-adc-thermal";
+		#thermal-sensor-cells = <0>;
+		io-channels = <&adc 10>;
+		io-channel-names = "sensor-channel";
+		temperature-lookup-table = <
+			90000 3812 89000 3802 88000 3793 87000 3782 86000 3773 85000 3761
+			84000 3752 83000 3741 82000 3730 81000 3716 80000 3705 79000 3691
+			78000 3680 77000 3666 76000 3650 75000 3636 74000 3620 73000 3607
+			72000 3591 71000 3573 70000 3557 69000 3538 68000 3520 67000 3502
+			66000 3482 65000 3461 64000 3441 63000 3420 62000 3397 61000 3375
+			60000 3352 59000 3327 58000 3302 57000 3277 56000 3249 55000 3222
+			54000 3195 53000 3165 52000 3136 51000 3106 50000 3074 49000 3042
+			48000 3011 47000 2976 46000 2942 45000 2906 44000 2872 43000 2833
+			42000 2797 41000 2758 40000 2719 39000 2678 38000 2637 37000 2596
+			36000 2553 35000 2510 34000 2467 33000 2421 32000 2378 31000 2332
+			30000 2285 29000 2239 28000 2192 27000 2144 26000 2096 25000 2048
+			24000 2000 23000 1951 22000 1902 21000 1853 20000 1804 19000 1755
+			18000 1706 17000 1657 16000 1608 15000 1559 14000 1511 13000 1463
+			12000 1416 11000 1369 10000 1323 9000 1277 8000 1231 7000 1187
+			6000 1143 5000 1100 4000 1057 3000 1016 2000 975 1000 935
+			0 896 (-1000) 858 (-2000) 821 (-3000) 786 (-4000) 750 (-5000) 717
+			(-6000) 684 (-7000) 651 (-8000) 621 (-9000) 591 (-10000) 562 (-11000) 534
+			(-12000) 507 (-13000) 482 (-14000) 456 (-15000) 433 (-16000) 410 (-17000) 388
+			(-18000) 367 (-19000) 347 (-20000) 327 >;
+	};
+
+	thermal-zones {
+		battery-ntc {
+			polling-delay = <10000>;
+			polling-delay-passive = <0>;
+			thermal-sensors = <&battery_ntc>;
+		};
+
+		usb-ntc {
+			polling-delay = <10000>;
+			polling-delay-passive = <0>;
+			thermal-sensors = <&usb_ntc>;
+		};
+
+		chg-ntc {
+			polling-delay = <10000>;
+			polling-delay-passive = <0>;
+			thermal-sensors = <&chg_ntc>;
+		};
+
+		sec-ap-thermistor {
+			polling-delay = <0>;
+			polling-delay-passive = <0>;
+			thermal-sensors = <&ap_therm>;
+		};
+
+		sec-wf-thermistor {
+			polling-delay = <0>;
+			polling-delay-passive = <0>;
+			thermal-sensors = <&wf_therm>;
+		};
+
+		sec-pa-thermistor {
+			polling-delay = <0>;
+			polling-delay-passive = <0>;
+			thermal-sensors = <&pa_therm>;
+		};
+	};
+};
+
+&adc {
+	status = "okay";
+};
+
+&cmu_busc {
+	status = "okay";
+};
+
+&mcinfo {
+	status = "okay";
+};
+
+&tmu_big {
+	status = "okay";
+};
+
+&tmu_gpu {
+	status = "okay";
+};
+
+&tmu_isp {
+	status = "okay";
+};
+
+&tmu_little {
+	status = "okay";
+};
