@@ -312,3 +312,4 @@
 #include "exynos8895-greatlte-pmic.dtsi"
 #include "exynos8895-greatlte-dvfs.dtsi"
 #include "exynos8895-greatlte-storage.dtsi"
+#include "exynos8895-greatlte-display.dtsi"
