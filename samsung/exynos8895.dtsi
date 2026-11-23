@@ -1727,11 +1727,11 @@
 		};
 
 		mmc: mmc@11500000 {
-			compatible = "samsung,exynos8895-dw-mshc-smu",
-				     "samsung,exynos7-dw-mshc-smu";
+			compatible = "samsung,exynos8895-dw-mshc",
+				     "samsung,exynos7-dw-mshc";
 			reg = <0x11500000 0x2000>;
 			assigned-clocks = <&cmu_top CLK_MOUT_CMU_FSYS1_MMC_CARD>;
-			assigned-clock-parents = <&cmu_top CLK_FOUT_SHARED4_PLL>;
+			assigned-clock-parents = <&cmu_top CLK_FOUT_SHARED2_PLL>;
 			clocks = <&cmu_fsys1 CLK_GOUT_FSYS1_MMC_CARD_I_ACLK>,
 				 <&cmu_fsys1 CLK_GOUT_FSYS1_MMC_CARD_SDCLKIN>;
 			clock-names = "biu", "ciu";
