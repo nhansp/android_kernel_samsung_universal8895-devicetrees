@@ -1,0 +1,120 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) USB
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&hsi2c_30 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	clock-frequency = <400000>;
+	pinctrl-names = "default", "hard_reset";
+	pinctrl-0 = <&hsi2c30_bus>;
+	pinctrl-1 = <&hsi2c30_reset>;
+	status = "okay";
+
+	typec: typec@33 {
+		compatible = "samsung,s2mm005";
+		reg = <0x33>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&usbpd_irq>;
+		interrupts-extended = <&gpa1 7 IRQ_TYPE_EDGE_FALLING>;
+		orientation-gpios = <&gpi1 7 GPIO_ACTIVE_HIGH>;
+		samsung,muic = <&max77865_muic>;
+		wakeup-source;
+
+		connector {
+			compatible = "usb-c-connector";
+			label = "USB-C";
+			power-role = "dual";
+			data-role = "dual";
+			try-power-role = "sink";
+			typec-power-opmode = "default";
+			vbus-supply = <&otg_vbus>;
+
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port@0 {
+					reg = <0>;
+
+					typec_hs: endpoint {
+						remote-endpoint = <&dwc3_hs>;
+					};
+				};
+
+				port@1 {
+					reg = <1>;
+
+					typec_ss: endpoint {
+						remote-endpoint = <&usbdrd_phy_ss>;
+					};
+				};
+			};
+		};
+	};
+};
+
+&pinctrl_alive {
+	usbpd_irq: usbpd-irq-pins {
+		samsung,pins = "gpa1-7";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+};
+
+&pinctrl_fsys0 {
+	usb_phy_port: usb-phy-port-pins {
+		samsung,pins = "gpi1-7";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+};
+
+&pinctrl_peric1 {
+	hsi2c30_reset: hsi2c30-reset-pins {
+		samsung,pins = "gpe4-7", "gpe4-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-val = <0>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV1>;
+	};
+};
+
+&usbdrd {
+	vdd33-supply = <&s2mps17_ldo6>;
+	vdd10-supply = <&s2mps17_ldo10>;
+	status = "okay";
+};
+
+&usbdrd_dwc3 {
+	dr_mode = "otg";
+	maximum-speed = "super-speed";
+	usb-role-switch;
+	role-switch-default-mode = "peripheral";
+
+	port {
+		dwc3_hs: endpoint {
+			remote-endpoint = <&typec_hs>;
+		};
+	};
+};
+
+&usbdrd_phy {
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb_phy_port>;
+	vdd18-dp-supply = <&s2mps17_ldo37>;
+	orientation-switch;
+	status = "okay";
+
+	port {
+		usbdrd_phy_ss: endpoint {
+			remote-endpoint = <&typec_ss>;
+		};
+	};
+};
