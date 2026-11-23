@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) secure world
+ */
+
+/ {
+	tee {
+		compatible = "samsung,exynos-tee";
+		interrupts = <GIC_SPI 233 IRQ_TYPE_EDGE_RISING>;
+	};
+
+	ufs-srpmb {
+		compatible = "samsung,ufs-srpmb";
+		interrupts = <GIC_SPI 69 IRQ_TYPE_EDGE_RISING>;
+		samsung,ufs = <&ufs>;
+	};
+
+	seclog {
+		compatible = "samsung,exynos-seclog";
+		interrupts = <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
+		memory-region = <&seclog_mem>;
+	};
+
+	rng {
+		compatible = "samsung,exynos8895-trng";
+	};
+};
