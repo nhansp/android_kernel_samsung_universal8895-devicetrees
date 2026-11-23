@@ -62,39 +62,12 @@
 			};
 		};
 
-		cpu4: cpu@0 {
-			device_type = "cpu";
-			compatible = "samsung,mongoose-m2";
-			reg = <0x0>;
-			enable-method = "psci";
-		};
-
-		cpu5: cpu@1 {
-			device_type = "cpu";
-			compatible = "samsung,mongoose-m2";
-			reg = <0x1>;
-			enable-method = "psci";
-		};
-
-		cpu6: cpu@2 {
-			device_type = "cpu";
-			compatible = "samsung,mongoose-m2";
-			reg = <0x2>;
-			enable-method = "psci";
-		};
-
-		cpu7: cpu@3 {
-			device_type = "cpu";
-			compatible = "samsung,mongoose-m2";
-			reg = <0x3>;
-			enable-method = "psci";
-		};
-
 		cpu0: cpu@100 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53";
 			reg = <0x100>;
 			enable-method = "psci";
+			capacity-dmips-mhz = <2048>;
 		};
 
 		cpu1: cpu@101 {
@@ -102,6 +75,7 @@
 			compatible = "arm,cortex-a53";
 			reg = <0x101>;
 			enable-method = "psci";
+			capacity-dmips-mhz = <2048>;
 		};
 
 		cpu2: cpu@102 {
@@ -109,6 +83,7 @@
 			compatible = "arm,cortex-a53";
 			reg = <0x102>;
 			enable-method = "psci";
+			capacity-dmips-mhz = <2048>;
 		};
 
 		cpu3: cpu@103 {
@@ -116,6 +91,39 @@
 			compatible = "arm,cortex-a53";
 			reg = <0x103>;
 			enable-method = "psci";
+			capacity-dmips-mhz = <2048>;
+		};
+
+		cpu4: cpu@0 {
+			device_type = "cpu";
+			compatible = "samsung,mongoose-m2";
+			reg = <0x0>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <5035>;
+		};
+
+		cpu5: cpu@1 {
+			device_type = "cpu";
+			compatible = "samsung,mongoose-m2";
+			reg = <0x1>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <5035>;
+		};
+
+		cpu6: cpu@2 {
+			device_type = "cpu";
+			compatible = "samsung,mongoose-m2";
+			reg = <0x2>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <5035>;
+		};
+
+		cpu7: cpu@3 {
+			device_type = "cpu";
+			compatible = "samsung,mongoose-m2";
+			reg = <0x3>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <5035>;
 		};
 	};
 
