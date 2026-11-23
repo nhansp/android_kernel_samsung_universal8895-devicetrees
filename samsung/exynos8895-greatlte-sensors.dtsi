@@ -1,0 +1,204 @@
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+/*
+ * Samsung Galaxy Note 8 (SM-N950N) sensors
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	gps-pwr {
+		compatible = "samsung,exynos8895-gps-pwr";
+		pinctrl-names = "default";
+		pinctrl-0 = <&ssp_gps_pwr_en>;
+		gpios = <&gpf0 3 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&hsi2c_9 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	clock-frequency = <400000>;
+	status = "okay";
+
+	grip@28 {
+		compatible = "semtech,sx9320-grip";
+		reg = <0x28>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&grip_irq>;
+		sx9320,nirq-gpio = <&gpa3 0 GPIO_ACTIVE_HIGH>;
+		sx9320,phen = <0x03>;
+		sx9320,gain = <0x01>;
+		sx9320,again = <0x08>;
+		sx9320,scan_period = <0x16>;
+		sx9320,range = <0x00>;
+		sx9320,sampling_freq = <0x05>;
+		sx9320,resolution = <0x07>;
+		sx9320,rawfilt = <0x01>;
+		sx9320,hyst = <0x01>;
+		sx9320,avgposfilt = <0x04>;
+		sx9320,avgnegfilt = <0x01>;
+		sx9320,avgthresh = <0x20>;
+		sx9320,debouncer = <0x01>;
+		sx9320,normal_thd = <0x1b>;
+		sx9320,afeph0 = <0x00>;
+		sx9320,afeph1 = <0x00>;
+		sx9320,afeph2 = <0x00>;
+		sx9320,afeph3 = <0x04>;
+	};
+};
+
+&hsi2c_26 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	clock-frequency = <400000>;
+	status = "okay";
+
+	hrm@57 {
+		compatible = "maxim,max86902-hrm";
+		reg = <0x57>;
+		pinctrl-names = "default", "sleep", "idle";
+		pinctrl-0 = <&hrm_irq>;
+		pinctrl-1 = <&hrm_irqsleep>;
+		pinctrl-2 = <&hrm_irqidle>;
+		hrmsensor,hrm_int-gpio = <&gpe6 6 GPIO_ACTIVE_HIGH>;
+		hrmsensor,vdd_1p8 = "HRM_1.8V_AP";
+		hrmsensor,led_3p3 = "HRM_3.3V_AP";
+		hrmsensor,i2c_1p8 = "VDD_NFC_1P8";
+		vdd-1p8-supply = <&s2dos03_ldo2>;
+		led-3p3-supply = <&s2dos03_ldo4>;
+		i2c-1p8-supply = <&ldo39_reg>;
+	};
+};
+
+&pinctrl_alive {
+	ssp_host_req: ssp-host-req-pins {
+		samsung,pins = "gpa3-4";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	ssp_batch_wake_irq: ssp-batch-wake-irq-pins {
+		samsung,pins = "gpa2-5";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	grip_irq: grip-irq-pins {
+		samsung,pins = "gpa3-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+};
+
+&pinctrl_fsys0 {
+	ssp_mcu_resp: ssp-mcu-resp-pins {
+		samsung,pins = "gpi1-5";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+};
+
+&pinctrl_peric1 {
+	ssp_spi_clk_mosi: ssp-spi-clk-mosi-pins {
+		samsung,pins = "gpe2-5", "gpe2-7";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	ssp_spi_cs: ssp-spi-cs-pins {
+		samsung,pins = "gpe2-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	ssp_spi_miso: ssp-spi-miso-pins {
+		samsung,pins = "gpe2-4";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	ssp_mcu_req: ssp-mcu-req-pins {
+		samsung,pins = "gpe6-1";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	ssp_gps_pwr_en: ssp-gps-pwr-en-pins {
+		samsung,pins = "gpf0-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+	};
+
+	hrm_irq: hrm-irq-pins {
+		samsung,pins = "gpe6-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	hrm_irqsleep: hrm-irqsleep-pins {
+		samsung,pins = "gpe6-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+
+	hrm_irqidle: hrm-irqidle-pins {
+		samsung,pins = "gpe6-6";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS7_PIN_DRV_LV4>;
+	};
+};
+
+&spi_10 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&ssp_spi_clk_mosi &ssp_spi_miso &ssp_spi_cs>;
+	cs-gpios = <&gpe2 6 GPIO_ACTIVE_LOW>;
+	num-cs = <1>;
+	assigned-clocks = <&cmu_top CLK_MOUT_CMU_PERIC1_USI08>,
+			  <&cmu_top CLK_DOUT_CMU_PERIC1_USI08>,
+			  <&cmu_peric1 CLK_MOUT_PERIC1_USI08_USER>;
+	assigned-clock-parents = <&cmu_top CLK_DOUT_CMU_SHARED2_DIV2>,
+				 <0>,
+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI08>;
+	assigned-clock-rates = <0>, <50000000>, <0>;
+	status = "okay";
+
+	gnss_hub: gnss-hub@0 {
+		compatible = "samsung,bcm4773-ssp";
+		reg = <0>;
+		spi-max-frequency = <26000000>;
+		spi-cpol;
+		spi-cpha;
+		pinctrl-names = "default";
+		pinctrl-0 = <&ssp_host_req &ssp_mcu_req &ssp_mcu_resp &ssp_batch_wake_irq>;
+		host-req-gpios = <&gpa3 4 GPIO_ACTIVE_HIGH>;
+		mcu-req-gpios = <&gpe6 1 GPIO_ACTIVE_HIGH>;
+		mcu-resp-gpios = <&gpi1 5 GPIO_ACTIVE_HIGH>;
+		batch-wake-gpios = <&gpa2 5 GPIO_ACTIVE_HIGH>;
+		vdd-mcu-1p8-supply = <&ldo38_reg>;
+		ssp-acc-position = <3>;
+		ssp-mag-position = <6>;
+		ssp-sns-combination = <0>;
+		ssp-ap-rev = <1>;
+		ssp-mag-array = [1b 56 86 0d 25 f0 fe 82 d4 36 ef 55 28 1c 01 e8 f4 68 57 79 ba fe d3 85 0a 4d 95];
+		ssp-glass-type = <0>;
+		ssp-mag-type = <1>;
+
+		controller-data {
+			samsung,spi-feedback-delay = <0>;
+		};
+	};
+};
